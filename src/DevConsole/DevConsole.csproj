@@ -16,6 +16,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\RnGo.Core\RnGo.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="nlog.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

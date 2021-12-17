@@ -1,11 +1,20 @@
+using NLog.Extensions.Logging;
+using RnGo.Core.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Logging.ClearProviders();
+builder.Logging.SetMinimumLevel(LogLevel.Trace);
+builder.Logging.AddNLog();
+
+builder.Services
+  // Services
+  .AddSingleton<ILinkResolverService, LinkResolverService>();
 
 var app = builder.Build();
 

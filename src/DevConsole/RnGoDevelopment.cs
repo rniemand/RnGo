@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NLog.Extensions.Logging;
 using Rn.NetCore.Common.Logging;
+using RnGo.Core.Services;
 
 namespace DevConsole
 {
@@ -50,7 +51,10 @@ namespace DevConsole
           loggingBuilder.ClearProviders();
           loggingBuilder.SetMinimumLevel(LogLevel.Trace);
           loggingBuilder.AddNLog(config);
-        });
+        })
+        
+        // Services
+        .AddSingleton<ILinkResolverService, LinkResolverService>();
 
       _services = services.BuildServiceProvider();
     }
