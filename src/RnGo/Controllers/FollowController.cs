@@ -3,7 +3,7 @@
 namespace RnGo.Controllers
 {
   [ApiController]
-  [Route("[controller]")]
+  [Route("f")]
   public class FollowController : ControllerBase
   {
     [HttpGet, Route("{id}")]
