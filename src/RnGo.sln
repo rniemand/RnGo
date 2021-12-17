@@ -7,9 +7,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RnGo", "RnGo\RnGo.csproj", 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Lib", "Lib", "{AC4C982A-5FF2-42BA-A737-BC48B4056347}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RnGo.Core", "RnGo.Core\RnGo.Core.csproj", "{8EFFC6C9-F3C6-42E9-A122-21CE26BCDFFA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RnGo.Core", "RnGo.Core\RnGo.Core.csproj", "{8EFFC6C9-F3C6-42E9-A122-21CE26BCDFFA}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RnGo.Core.T1.Tests", "RnGo.Core.T1.Tests\RnGo.Core.T1.Tests.csproj", "{807DE201-7C94-43E2-AF77-BA4E5C2F5DF7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevConsole", "DevConsole\DevConsole.csproj", "{8B6DDDAB-4E2A-4347-A5D3-B51D416906D1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,6 +31,10 @@ Global
 		{807DE201-7C94-43E2-AF77-BA4E5C2F5DF7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{807DE201-7C94-43E2-AF77-BA4E5C2F5DF7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{807DE201-7C94-43E2-AF77-BA4E5C2F5DF7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8B6DDDAB-4E2A-4347-A5D3-B51D416906D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8B6DDDAB-4E2A-4347-A5D3-B51D416906D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8B6DDDAB-4E2A-4347-A5D3-B51D416906D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8B6DDDAB-4E2A-4347-A5D3-B51D416906D1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
