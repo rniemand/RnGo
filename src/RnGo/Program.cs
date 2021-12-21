@@ -15,7 +15,8 @@ builder.Logging.AddNLog();
 
 builder.Services
   // Services
-  .AddSingleton<ILinkResolverService, LinkResolverService>()
+  .AddSingleton<ILinkService, LinkService>()
+  .AddSingleton<ILinkStorageService, LinkStorageService>()
 
   // Helpers
   .AddSingleton<IStringHelper, StringHelper>();

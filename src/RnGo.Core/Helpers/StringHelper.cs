@@ -29,13 +29,7 @@ namespace RnGo.Core.Helpers
 
     public string GenerateLinkString(long input)
     {
-      var numberToBase36 = Base36.NumberToBase36(input);
-      var base36ToNumber = Base36.Base36ToNumber(numberToBase36);
-
-      var lower = numberToBase36.ToLower();
-      var base36 = new Base36(lower).NumericValue;
-
-      return "";
+      return Base36.NumberToBase36(input);
     }
   }
 }

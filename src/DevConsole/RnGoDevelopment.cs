@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using NLog.Extensions.Logging;
 using Rn.NetCore.Common.Logging;
 using RnGo.Core.Helpers;
+using RnGo.Core.Models;
 using RnGo.Core.Services;
 
 namespace DevConsole
@@ -34,7 +35,7 @@ namespace DevConsole
     public RnGoDevelopment ResolveLink()
     {
       _services
-        .GetRequiredService<ILinkResolverService>()
+        .GetRequiredService<ILinkService>()
         .Resolve("a");
 
       return this;
@@ -57,6 +58,14 @@ namespace DevConsole
         .GenerateLinkString(input);
 
       Console.WriteLine($"Generated '{linkString}' from '{input}'");
+      return this;
+    }
+
+    public RnGoDevelopment StoreLink()
+    {
+      var linkService = _services.GetRequiredService<ILinkService>();
+      var link = new ResolvedLink();
+
       return this;
     }
 
@@ -84,7 +93,8 @@ namespace DevConsole
         })
         
         // Services
-        .AddSingleton<ILinkResolverService, LinkResolverService>()
+        .AddSingleton<ILinkService, LinkService>()
+        .AddSingleton<ILinkStorageService, LinkStorageService>()
         
         // Helpers
         .AddSingleton<IStringHelper, StringHelper>();

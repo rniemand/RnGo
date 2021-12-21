@@ -4,21 +4,22 @@ using RnGo.Core.Models;
 
 namespace RnGo.Core.Services
 {
-  public interface ILinkResolverService
+  public interface ILinkService
   {
     ResolvedLink Resolve(string shortCode);
+    string StoreLink(ResolvedLink link);
   }
 
-  public class LinkResolverService : ILinkResolverService
+  public class LinkService : ILinkService
   {
-    private readonly ILogger<LinkResolverService> _logger;
+    private readonly ILogger<LinkService> _logger;
     private readonly IStringHelper _stringHelper;
 
-    public LinkResolverService(
-      ILogger<LinkResolverService> logger,
+    public LinkService(
+      ILogger<LinkService> logger,
       IStringHelper stringHelper)
     {
-      // TODO: [LinkResolverService] (TESTS) Add tests
+      // TODO: [LinkService] (TESTS) Add tests
       _logger = logger;
       _stringHelper = stringHelper;
     }
@@ -28,6 +29,15 @@ namespace RnGo.Core.Services
       var encoded = _stringHelper.GuidString();
 
       return new ResolvedLink();
+    }
+
+    public string StoreLink(ResolvedLink link)
+    {
+
+
+
+
+      return "";
     }
   }
 }
