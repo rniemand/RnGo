@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NLog.Extensions.Logging;
 using Rn.NetCore.Common.Logging;
+using RnGo.Core.Helpers;
 using RnGo.Core.Services;
 
 namespace DevConsole
@@ -26,6 +27,15 @@ namespace DevConsole
       _services
         .GetRequiredService<ILoggerAdapter<RnGoDevelopment>>()
         .Info("Hello World");
+
+      return this;
+    }
+
+    public RnGoDevelopment ResolveLink()
+    {
+      _services
+        .GetRequiredService<ILinkResolverService>()
+        .Resolve("a");
 
       return this;
     }
@@ -54,7 +64,10 @@ namespace DevConsole
         })
         
         // Services
-        .AddSingleton<ILinkResolverService, LinkResolverService>();
+        .AddSingleton<ILinkResolverService, LinkResolverService>()
+        
+        // Helpers
+        .AddSingleton<IStringHelper, StringHelper>();
 
       _services = services.BuildServiceProvider();
     }

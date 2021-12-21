@@ -1,4 +1,5 @@
 using NLog.Extensions.Logging;
+using RnGo.Core.Helpers;
 using RnGo.Core.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,7 +15,10 @@ builder.Logging.AddNLog();
 
 builder.Services
   // Services
-  .AddSingleton<ILinkResolverService, LinkResolverService>();
+  .AddSingleton<ILinkResolverService, LinkResolverService>()
+
+  // Helpers
+  .AddSingleton<IStringHelper, StringHelper>();
 
 var app = builder.Build();
 

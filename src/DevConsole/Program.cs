@@ -1,5 +1,6 @@
 ﻿using DevConsole;
 
 new RnGoDevelopment()
-  .HelloWorld()
+  //.HelloWorld()
+  .ResolveLink()
   .DoNothing();
