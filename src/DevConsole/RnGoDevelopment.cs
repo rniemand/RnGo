@@ -40,6 +40,16 @@ namespace DevConsole
       return this;
     }
 
+    public RnGoDevelopment Base64Encode()
+    {
+      var helper = _services.GetRequiredService<IStringHelper>();
+      var encoded = helper.Base64Encode("hello");
+      Console.WriteLine("Encoded: " + encoded);
+      var decoded = helper.Base64Decode(encoded);
+      Console.WriteLine("Decoded: " + decoded);
+      return this;
+    }
+
     private static void ConfigureDI()
     {
       var services = new ServiceCollection();

@@ -2,5 +2,6 @@
 
 new RnGoDevelopment()
   //.HelloWorld()
-  .ResolveLink()
+  //.ResolveLink()
+  .Base64Encode()
   .DoNothing();
