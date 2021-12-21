@@ -50,6 +50,16 @@ namespace DevConsole
       return this;
     }
 
+    public RnGoDevelopment GenerateLinkString(long input)
+    {
+      var linkString = _services
+        .GetRequiredService<IStringHelper>()
+        .GenerateLinkString(input);
+
+      Console.WriteLine($"Generated '{linkString}' from '{input}'");
+      return this;
+    }
+
     private static void ConfigureDI()
     {
       var services = new ServiceCollection();

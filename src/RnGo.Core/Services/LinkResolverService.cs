@@ -25,7 +25,7 @@ namespace RnGo.Core.Services
 
     public ResolvedLink Resolve(string shortCode)
     {
-
+      var encoded = _stringHelper.GuidString();
 
       return new ResolvedLink();
     }
