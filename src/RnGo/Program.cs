@@ -1,5 +1,8 @@
 using NLog.Extensions.Logging;
+using Rn.NetCore.Common.Abstractions;
+using Rn.NetCore.Common.Helpers;
 using RnGo.Core.Helpers;
+using RnGo.Core.Providers;
 using RnGo.Core.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,7 +22,15 @@ builder.Services
   .AddSingleton<ILinkStorageService, LinkStorageService>()
 
   // Helpers
-  .AddSingleton<IStringHelper, StringHelper>();
+  .AddSingleton<IStringHelper, StringHelper>()
+  .AddSingleton<IJsonHelper, JsonHelper>()
+
+  // Abstractions
+  .AddSingleton<IFileAbstraction, FileAbstraction>()
+  .AddSingleton<IDirectoryAbstraction, DirectoryAbstraction>()
+  
+  // Providers
+  .AddSingleton<IRnGoConfigProvider, RnGoConfigProvider>();
 
 var app = builder.Build();
 

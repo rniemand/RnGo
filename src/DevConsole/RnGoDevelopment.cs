@@ -2,9 +2,12 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NLog.Extensions.Logging;
+using Rn.NetCore.Common.Abstractions;
+using Rn.NetCore.Common.Helpers;
 using Rn.NetCore.Common.Logging;
 using RnGo.Core.Helpers;
 using RnGo.Core.Models;
+using RnGo.Core.Providers;
 using RnGo.Core.Services;
 
 namespace DevConsole
@@ -105,7 +108,15 @@ namespace DevConsole
         .AddSingleton<ILinkStorageService, LinkStorageService>()
         
         // Helpers
-        .AddSingleton<IStringHelper, StringHelper>();
+        .AddSingleton<IStringHelper, StringHelper>()
+        .AddSingleton<IJsonHelper, JsonHelper>()
+        
+        // Abstractions
+        .AddSingleton<IFileAbstraction, FileAbstraction>()
+        .AddSingleton<IDirectoryAbstraction, DirectoryAbstraction>()
+
+        // Providers
+        .AddSingleton<IRnGoConfigProvider, RnGoConfigProvider>();
 
       _services = services.BuildServiceProvider();
     }
