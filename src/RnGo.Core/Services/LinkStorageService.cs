@@ -12,6 +12,7 @@ namespace RnGo.Core.Services
   {
     Task<ResolvedLink?> GetByUrl(string url);
     Task<string> StoreLink(ResolvedLink link);
+    Task<ResolvedLink?> GetByShortCode(string shortCode);
   }
 
   public class LinkStorageService : ILinkStorageService
@@ -73,11 +74,19 @@ namespace RnGo.Core.Services
       var shortCode = _stringHelper.GenerateLinkString(link.LinkId);
       link.ShortCode = shortCode;
       
-      _links[shortCode] = link;
+      _links[shortCode.ToUpper()] = link;
       SaveLinks();
 
       await Task.CompletedTask;
       return shortCode;
+    }
+
+    public async Task<ResolvedLink?> GetByShortCode(string shortCode)
+    {
+      // TODO: [LinkStorageService.GetByShortCode] (TESTS) Add tests
+      var upperCode = shortCode.ToUpper();
+      await Task.CompletedTask;
+      return !_links.ContainsKey(upperCode) ? null : _links[upperCode];
     }
 
     // Internal methods
@@ -119,7 +128,7 @@ namespace RnGo.Core.Services
         if (string.IsNullOrWhiteSpace(link.ShortCode))
           link.ShortCode = _stringHelper.GenerateLinkString(link.LinkId);
 
-        _links[link.ShortCode] = link;
+        _links[link.ShortCode.ToUpper()] = link;
         if (link.LinkId > _nextLinkId) _nextLinkId = link.LinkId;
       }
 

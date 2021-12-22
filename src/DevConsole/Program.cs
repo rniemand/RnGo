@@ -5,5 +5,6 @@ new RnGoDevelopment()
   //.ResolveLink()
   //.Base64Encode()
   //.GenerateLinkString(1258741)
-  .StoreLink()
+  //.StoreLink()
+  .ResolveLink("1")
   .DoNothing();

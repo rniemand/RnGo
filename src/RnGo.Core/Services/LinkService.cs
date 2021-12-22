@@ -6,7 +6,7 @@ namespace RnGo.Core.Services
 {
   public interface ILinkService
   {
-    Task<ResolvedLink> Resolve(string shortCode);
+    Task<ResolvedLink?> Resolve(string shortCode);
     Task<string> StoreLink(ResolvedLink link);
   }
 
@@ -27,11 +27,11 @@ namespace RnGo.Core.Services
       _linkStore = linkStore;
     }
 
-    public async Task<ResolvedLink> Resolve(string shortCode)
+    public async Task<ResolvedLink?> Resolve(string shortCode)
     {
-      var encoded = _stringHelper.GuidString();
-
-      return new ResolvedLink();
+      // TODO: [LinkService.Resolve] (TESTS) Add tests
+      var link = await _linkStore.GetByShortCode(shortCode);
+      return link ?? null;
     }
 
     public async Task<string> StoreLink(ResolvedLink link)

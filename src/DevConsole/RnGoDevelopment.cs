@@ -69,13 +69,30 @@ namespace DevConsole
       var linkService = _services.GetRequiredService<ILinkService>();
       var link = new ResolvedLink
       {
-        Url = "https://www.google.com/?q=1"
+        Url = "https://www.google.com/?q=3"
       };
 
       var result = linkService
         .StoreLink(link)
         .GetAwaiter()
         .GetResult();
+
+      Console.WriteLine($"Stored as '{result}'");
+
+      return this;
+    }
+
+    public RnGoDevelopment ResolveLink(string shortCode)
+    {
+      var jsonHelper = _services.GetRequiredService<IJsonHelper>();
+
+      var resolvedLink = _services
+        .GetRequiredService<ILinkService>()
+        .Resolve(shortCode)
+        .GetAwaiter()
+        .GetResult();
+
+      Console.WriteLine($"Resolved as: {jsonHelper.SerializeObject(resolvedLink)}");
 
       return this;
     }
