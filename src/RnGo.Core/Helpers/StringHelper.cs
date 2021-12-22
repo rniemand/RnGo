@@ -8,6 +8,7 @@ namespace RnGo.Core.Helpers
     string Base64Decode(string input);
     string GuidString();
     string GenerateLinkString(long input);
+    long LinkStringToLong(string linkString);
   }
 
   public class StringHelper : IStringHelper
@@ -30,6 +31,12 @@ namespace RnGo.Core.Helpers
     public string GenerateLinkString(long input)
     {
       return Base36.NumberToBase36(input);
+    }
+
+    public long LinkStringToLong(string linkString)
+    {
+      // TODO: [StringHelper.LinkStringToLong] (TESTS) Add tests
+      return Base36.Base36ToNumber(linkString);
     }
   }
 }
