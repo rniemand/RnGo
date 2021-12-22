@@ -11,6 +11,7 @@ namespace RnGo.Core.Services
   public interface ILinkStorageService
   {
     Task<ResolvedLink?> GetByUrl(string url);
+    Task<string> StoreLink(ResolvedLink link);
   }
 
   public class LinkStorageService : ILinkStorageService
@@ -23,6 +24,7 @@ namespace RnGo.Core.Services
     private readonly IStringHelper _stringHelper;
     private readonly string _storageFilePath;
     private readonly Dictionary<string, ResolvedLink> _links;
+    private long _nextLinkId;
 
     public LinkStorageService(
       ILogger<LinkStorageService> logger,
@@ -38,6 +40,7 @@ namespace RnGo.Core.Services
       _file = file;
       _jsonHelper = jsonHelper;
       _stringHelper = stringHelper;
+      _nextLinkId = 0;
 
       _links = new Dictionary<string, ResolvedLink>();
       _config = configProvider.Provide();
@@ -53,8 +56,28 @@ namespace RnGo.Core.Services
       if (string.IsNullOrWhiteSpace(url))
         return null;
 
+      if (_links.Count == 0)
+        return null;
+
       await Task.CompletedTask;
-      return null;
+      var (_, value) = _links
+        .FirstOrDefault(x => x.Value.Url.Equals(url));
+
+      return value ?? null;
+    }
+
+    public async Task<string> StoreLink(ResolvedLink link)
+    {
+      // TODO: [LinkStorageService.StoreLink] (TESTS) Add tests
+      link.LinkId = _nextLinkId++;
+      var shortCode = _stringHelper.GenerateLinkString(link.LinkId);
+      link.ShortCode = shortCode;
+      
+      _links[shortCode] = link;
+      SaveLinks();
+
+      await Task.CompletedTask;
+      return shortCode;
     }
 
     // Internal methods
@@ -93,8 +116,38 @@ namespace RnGo.Core.Services
       _links.Clear();
       foreach (var link in fileLinks)
       {
-        _links[_stringHelper.GenerateLinkString(link.LinkId)] = link;
+        if (string.IsNullOrWhiteSpace(link.ShortCode))
+          link.ShortCode = _stringHelper.GenerateLinkString(link.LinkId);
+
+        _links[link.ShortCode] = link;
+        if (link.LinkId > _nextLinkId) _nextLinkId = link.LinkId;
       }
+
+      _nextLinkId += 1;
+    }
+
+    private void BackupLinksFile()
+    {
+      // TODO: [LinkStorageService.BackupLinksFile] (TESTS) Add tests
+      var backupFile = $"{_storageFilePath}.backup";
+
+      if (_file.Exists(backupFile))
+        _file.Delete(backupFile);
+
+      _file.Move(_storageFilePath, backupFile);
+    }
+
+    private void SaveLinks()
+    {
+      // TODO: [LinkStorageService.SaveLinks] (TESTS) Add tests
+      BackupLinksFile();
+
+      var links = _links
+        .Select(link => link.Value)
+        .ToList();
+
+      var linksJson = _jsonHelper.SerializeObject(links);
+      _file.WriteAllText(_storageFilePath, linksJson);
     }
   }
 }

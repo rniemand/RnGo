@@ -41,9 +41,10 @@ namespace RnGo.Core.Services
         return string.Empty;
 
       var resolvedLink = await _linkStore.GetByUrl(link.Url);
+      if (resolvedLink is null)
+        return await _linkStore.StoreLink(link);
 
-
-      return "";
+      return resolvedLink.ShortCode;
     }
 
     // Internal

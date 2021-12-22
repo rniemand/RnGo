@@ -69,7 +69,7 @@ namespace DevConsole
       var linkService = _services.GetRequiredService<ILinkService>();
       var link = new ResolvedLink
       {
-        Url = "https://www.google.com/"
+        Url = "https://www.google.com/?q=1"
       };
 
       var result = linkService
