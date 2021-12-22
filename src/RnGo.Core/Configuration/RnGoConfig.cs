@@ -4,12 +4,14 @@
   {
     public const string Key = "RnGo";
 
+    public string RootDirectory { get; set; }
     public string StorageDirectory { get; set; }
 
     public RnGoConfig()
     {
       // TODO: [RnGoConfig] (TESTS) Add tests
-      StorageDirectory = "./storage";
+      RootDirectory = "./";
+      StorageDirectory = "{root}storage";
     }
   }
 }

@@ -114,6 +114,8 @@ namespace DevConsole
         // Abstractions
         .AddSingleton<IFileAbstraction, FileAbstraction>()
         .AddSingleton<IDirectoryAbstraction, DirectoryAbstraction>()
+        .AddSingleton<IEnvironmentAbstraction, EnvironmentAbstraction>()
+        .AddSingleton<IPathAbstraction, PathAbstraction>()
 
         // Providers
         .AddSingleton<IRnGoConfigProvider, RnGoConfigProvider>();
