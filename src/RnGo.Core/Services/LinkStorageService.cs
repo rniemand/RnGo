@@ -45,8 +45,11 @@ namespace RnGo.Core.Services
 
       _links = new Dictionary<string, ResolvedLink>();
       _config = configProvider.Provide();
+
       _storageFilePath = "{root}links.store.json"
         .Replace("{root}", _config.StorageDirectory);
+
+      _logger.LogInformation("Setting data file path to: {path}", _storageFilePath);
 
       InitializeStorage();
     }
