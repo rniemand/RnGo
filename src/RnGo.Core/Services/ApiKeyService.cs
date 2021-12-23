@@ -6,7 +6,7 @@ namespace RnGo.Core.Services
 {
   public interface IApiKeyService
   {
-    Task<bool> IsValidApiKey(string key);
+    Task<bool> IsValidApiKey(string apiKey);
   }
 
   public class ApiKeyService : IApiKeyService
@@ -32,15 +32,23 @@ namespace RnGo.Core.Services
 
 
     // Interface methods
-    public async Task<bool> IsValidApiKey(string key)
+    public async Task<bool> IsValidApiKey(string apiKey)
     {
       // TODO: [ApiKeyService.IsValidApiKey] (TESTS) Add tests
       await Task.CompletedTask;
       if (_apiKeyCount == 0)
         return false;
 
-      var upperKey = key.ToUpper();
-      return _apiKeys.Any(x => x.Equals(upperKey));
+      var upperKey = apiKey.ToUpper();
+      var isValid = _apiKeys.Any(x => x.Equals(upperKey));
+
+      if (!isValid)
+      {
+        _logger.LogWarning("Invalid API provided: {apiKey}", apiKey);
+        return false;
+      }
+
+      return true;
     }
 
 
