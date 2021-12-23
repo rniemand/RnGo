@@ -68,16 +68,16 @@ namespace DevConsole
     {
       var linkService = _services.GetRequiredService<ILinkService>();
       
-      var result = linkService
+      var response = linkService
         .AddLink(new AddLinkRequest
         {
           Url = url,
-          ApiKey = apiKey ?? "3349B5FC-04F3-4849-8623-428CDE172C81"
+          ApiKey = apiKey ?? "18A8B66F-B4F1-4814-8771-D1EABD9CFB43"
         })
         .GetAwaiter()
         .GetResult();
 
-      Console.WriteLine($"Stored as '{result}'");
+      Console.WriteLine($"Stored as '{response.ShortCode}'");
 
       return this;
     }
