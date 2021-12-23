@@ -16,16 +16,19 @@ namespace RnGo.Core.Services
     private readonly ILogger<LinkService> _logger;
     private readonly ILinkStorageService _linkStore;
     private readonly ILinkStatsService _statsService;
+    private readonly IApiKeyService _apiKeyService;
 
     public LinkService(
       ILogger<LinkService> logger,
       ILinkStorageService linkStore,
-      ILinkStatsService statsService)
+      ILinkStatsService statsService,
+      IApiKeyService apiKeyService)
     {
       // TODO: [LinkService] (TESTS) Add tests
       _logger = logger;
       _linkStore = linkStore;
       _statsService = statsService;
+      _apiKeyService = apiKeyService;
     }
 
     public async Task<RnGoLink?> Resolve(string shortCode)
@@ -44,8 +47,13 @@ namespace RnGo.Core.Services
       // TODO: [LinkService.StoreLink] (TESTS) Add tests
       var response = new AddLinkResponse();
 
+      // Ensure that this is a valid URL
       if (!IsValidLink(request.Url))
         return response.WithFailure("Invalid URL");
+
+      // Ensure that this is a valid API key
+      if (!await _apiKeyService.IsValidApiKey(request.ApiKey))
+        return response.WithFailure("Invalid API key");
 
       // Check for an already existing link first
       var existingLink = await _linkStore.GetByUrl(request.Url);

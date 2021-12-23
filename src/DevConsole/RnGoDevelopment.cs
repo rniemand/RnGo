@@ -64,7 +64,7 @@ namespace DevConsole
       return this;
     }
 
-    public RnGoDevelopment StoreLink(string url)
+    public RnGoDevelopment AddLink(string url, string? apiKey = null)
     {
       var linkService = _services.GetRequiredService<ILinkService>();
       
@@ -72,7 +72,7 @@ namespace DevConsole
         .AddLink(new AddLinkRequest
         {
           Url = url,
-          ApiKey = "3349B5FC-04F3-4849-8623-428CDE172C81"
+          ApiKey = apiKey ?? "3349B5FC-04F3-4849-8623-428CDE172C81"
         })
         .GetAwaiter()
         .GetResult();
@@ -137,6 +137,7 @@ namespace DevConsole
         .AddSingleton<ILinkService, LinkService>()
         .AddSingleton<ILinkStorageService, LinkStorageService>()
         .AddSingleton<ILinkStatsService, LinkStatsService>()
+        .AddSingleton<IApiKeyService, ApiKeyService>()
 
         // Helpers
         .AddSingleton<IStringHelper, StringHelper>()

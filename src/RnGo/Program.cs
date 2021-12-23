@@ -21,6 +21,7 @@ builder.Services
   .AddSingleton<ILinkService, LinkService>()
   .AddSingleton<ILinkStorageService, LinkStorageService>()
   .AddSingleton<ILinkStatsService, LinkStatsService>()
+  .AddSingleton<IApiKeyService, ApiKeyService>()
 
   // Helpers
   .AddSingleton<IStringHelper, StringHelper>()
