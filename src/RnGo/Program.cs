@@ -7,6 +7,7 @@ using Rn.NetCore.DbCommon.Interfaces;
 using Rn.NetCore.Metrics;
 using RnGo.Core.Helpers;
 using RnGo.Core.Providers;
+using RnGo.Core.RepoQueries;
 using RnGo.Core.Repositories;
 using RnGo.Core.Services;
 
@@ -49,7 +50,8 @@ builder.Services
   // Database
   .AddSingleton<IConnectionResolver>(new ConnectionResolver(builder.Configuration, "RnGo"))
   .AddSingleton<IDbConnectionHelper, MySqlConnectionHelper>()
-  .AddSingleton<ILinkRepo, LinkRepo>();
+  .AddSingleton<ILinkRepo, LinkRepo>()
+  .AddSingleton<ILinkRepoQueries, LinkRepoQueries>();
 
 var app = builder.Build();
 

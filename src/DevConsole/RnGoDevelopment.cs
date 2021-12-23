@@ -9,9 +9,11 @@ using Rn.NetCore.DbCommon;
 using Rn.NetCore.DbCommon.Helpers;
 using Rn.NetCore.DbCommon.Interfaces;
 using Rn.NetCore.Metrics;
+using RnGo.Core.Entities;
 using RnGo.Core.Helpers;
 using RnGo.Core.Models;
 using RnGo.Core.Providers;
+using RnGo.Core.RepoQueries;
 using RnGo.Core.Repositories;
 using RnGo.Core.Services;
 
@@ -102,6 +104,23 @@ namespace DevConsole
       return this;
     }
 
+    public RnGoDevelopment AddDatabaseLink()
+    {
+      var repo = _services.GetRequiredService<ILinkRepo>();
+
+      repo
+        .AddLink(new LinkEntity
+        {
+          Url = "https://docs.google.com/spreadsheets",
+          ShortCode = "2"
+        })
+        .GetAwaiter()
+        .GetResult();
+
+
+      return this;
+    }
+
     public RnGoDevelopment GetLinkCount()
     {
       var urlCount = _services
@@ -165,7 +184,8 @@ namespace DevConsole
         // Database
         .AddSingleton<IConnectionResolver>(new ConnectionResolver(config, "RnGo"))
         .AddSingleton<IDbConnectionHelper, MySqlConnectionHelper>()
-        .AddSingleton<ILinkRepo, LinkRepo>();
+        .AddSingleton<ILinkRepo, LinkRepo>()
+        .AddSingleton<ILinkRepoQueries, LinkRepoQueries>();
 
       return services.BuildServiceProvider();
     }
