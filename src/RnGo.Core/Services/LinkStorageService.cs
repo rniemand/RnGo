@@ -15,7 +15,7 @@ namespace RnGo.Core.Services
   {
     Task<RnGoLinkDto?> GetByUrl(string url);
     Task<string> StoreLink(string link);
-    Task<RnGoLink?> GetByShortCode(string shortCode);
+    Task<LinkEntity?> GetByShortCode(string shortCode);
     Task<int> GetLinkCount();
   }
 
@@ -29,7 +29,6 @@ namespace RnGo.Core.Services
     private readonly IStringHelper _stringHelper;
     private readonly ILinkRepo _linkRepo;
     private readonly string _storageFilePath;
-    private readonly Dictionary<string, RnGoLink> _links;
     private long _nextLinkId;
 
     public LinkStorageService(
@@ -49,8 +48,7 @@ namespace RnGo.Core.Services
       _stringHelper = stringHelper;
       _linkRepo = linkRepo;
       _nextLinkId = 0;
-
-      _links = new Dictionary<string, RnGoLink>();
+      
       _config = configProvider.Provide();
 
       _storageFilePath = "{root}links.store.json"
@@ -99,12 +97,10 @@ namespace RnGo.Core.Services
       return string.Empty;
     }
 
-    public async Task<RnGoLink?> GetByShortCode(string shortCode)
+    public async Task<LinkEntity?> GetByShortCode(string shortCode)
     {
       // TODO: [LinkStorageService.GetByShortCode] (TESTS) Add tests
-      var upperCode = shortCode.ToUpper();
-      await Task.CompletedTask;
-      return !_links.ContainsKey(upperCode) ? null : _links[upperCode];
+      return await _linkRepo.GetByShortCode(shortCode);
     }
 
     public async Task<int> GetLinkCount()

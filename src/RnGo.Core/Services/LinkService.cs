@@ -6,7 +6,7 @@ namespace RnGo.Core.Services
 {
   public interface ILinkService
   {
-    Task<RnGoLink?> Resolve(string shortCode);
+    Task<string> Resolve(string shortCode);
     Task<AddLinkResponse> AddLink(AddLinkRequest request);
     Task<int> GetLinkCount();
   }
@@ -31,15 +31,17 @@ namespace RnGo.Core.Services
       _apiKeyService = apiKeyService;
     }
 
-    public async Task<RnGoLink?> Resolve(string shortCode)
+    public async Task<string> Resolve(string shortCode)
     {
       // TODO: [LinkService.Resolve] (TESTS) Add tests
       var link = await _linkStore.GetByShortCode(shortCode);
 
-      if (link is not null)
-        await _statsService.RecordLinkFollow(link);
+      if (link is null)
+        return string.Empty;
 
-      return link ?? null;
+      await _statsService.RecordLinkFollow(link);
+
+      return link.Url;
     }
 
     public async Task<AddLinkResponse> AddLink(AddLinkRequest request)

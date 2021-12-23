@@ -10,6 +10,7 @@ namespace RnGo.Core.Repositories
     Task<LinkEntity?> GetByUrl(string url);
     Task<GenericCountEntity?> GetMaxLinkId();
     Task<LinkEntity?> GetById(long linkId);
+    Task<LinkEntity?> GetByShortCode(string shortCode);
   }
 
   public class LinkRepo : BaseRepo<LinkRepo>, ILinkRepo
@@ -40,7 +41,7 @@ namespace RnGo.Core.Repositories
       return await GetSingle<LinkEntity>(
         nameof(GetByUrl),
         _queries.GetByUrl(),
-        new {Url = url}
+        new { Url = url }
       );
     }
 
@@ -59,7 +60,17 @@ namespace RnGo.Core.Repositories
       return await GetSingle<LinkEntity>(
         nameof(GetById),
         _queries.GetById(),
-        new {LinkId = linkId}
+        new { LinkId = linkId }
+      );
+    }
+
+    public async Task<LinkEntity?> GetByShortCode(string shortCode)
+    {
+      // TODO: [LinkRepo.GetByShortCode] (TESTS) Add tests
+      return await GetSingle<LinkEntity>(
+        nameof(GetByShortCode),
+        _queries.GetByShortCode(),
+        new { ShortCode = shortCode }
       );
     }
   }

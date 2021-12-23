@@ -6,6 +6,7 @@
     string GetByUrl();
     string GetMaxLinkId();
     string GetById();
+    string GetByShortCode();
   }
   
   public class LinkRepoQueries : ILinkRepoQueries
@@ -35,6 +36,15 @@
     public string GetById()
     {
       return @"SELECT * FROM `Links` WHERE `LinkId` = @LinkId";
+    }
+
+    public string GetByShortCode()
+    {
+      return @"SELECT *
+      FROM `Links` l
+      WHERE
+	      l.`Deleted` = 0 AND
+	      l.`ShortCode` = @ShortCode";
     }
   }
 }

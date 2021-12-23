@@ -2,6 +2,7 @@
 using Rn.NetCore.Common.Abstractions;
 using Rn.NetCore.Common.Helpers;
 using RnGo.Core.Configuration;
+using RnGo.Core.Entities;
 using RnGo.Core.Models;
 using RnGo.Core.Providers;
 
@@ -9,7 +10,7 @@ namespace RnGo.Core.Services
 {
   public interface ILinkStatsService
   {
-    Task RecordLinkFollow(RnGoLink link);
+    Task RecordLinkFollow(LinkEntity link);
   }
 
   public class LinkStatsService : ILinkStatsService
@@ -48,18 +49,20 @@ namespace RnGo.Core.Services
 
 
     // Interface methods
-    public async Task RecordLinkFollow(RnGoLink link)
+    public async Task RecordLinkFollow(LinkEntity link)
     {
       // TODO: [LinkStatsService.RecordLinkFollow] (TESTS) Add tests
       await Task.CompletedTask;
 
-      var filePath = GenerateStatsFilePath(link);
-      var statsEntry = GetStatsEntry(link, filePath);
+      //var filePath = GenerateStatsFilePath(link);
+      //var statsEntry = GetStatsEntry(link, filePath);
 
-      statsEntry.LastCallUtc = _dateTime.UtcNow;
-      statsEntry.HitCount += 1;
+      //statsEntry.LastCallUtc = _dateTime.UtcNow;
+      //statsEntry.HitCount += 1;
 
-      SaveStatsEntry(statsEntry, filePath);
+      //SaveStatsEntry(statsEntry, filePath);
+
+      Console.WriteLine("");
     }
 
 
