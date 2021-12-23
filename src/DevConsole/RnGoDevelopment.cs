@@ -14,11 +14,11 @@ namespace DevConsole
 {
   public class RnGoDevelopment
   {
-    private static IServiceProvider? _services;
+    private readonly IServiceProvider _services;
 
     public RnGoDevelopment()
     {
-      ConfigureDI();
+      _services = BuildServiceContainer();
     }
 
     public RnGoDevelopment DoNothing()
@@ -110,7 +110,7 @@ namespace DevConsole
       return this;
     }
 
-    private static void ConfigureDI()
+    private static IServiceProvider BuildServiceContainer()
     {
       var services = new ServiceCollection();
 
@@ -136,6 +136,7 @@ namespace DevConsole
         // Services
         .AddSingleton<ILinkService, LinkService>()
         .AddSingleton<ILinkStorageService, LinkStorageService>()
+        .AddSingleton<ILinkStatsService, LinkStatsService>()
 
         // Helpers
         .AddSingleton<IStringHelper, StringHelper>()
@@ -146,11 +147,12 @@ namespace DevConsole
         .AddSingleton<IDirectoryAbstraction, DirectoryAbstraction>()
         .AddSingleton<IEnvironmentAbstraction, EnvironmentAbstraction>()
         .AddSingleton<IPathAbstraction, PathAbstraction>()
+        .AddSingleton<IDateTimeAbstraction, DateTimeAbstraction>()
 
         // Providers
         .AddSingleton<IRnGoConfigProvider, RnGoConfigProvider>();
 
-      _services = services.BuildServiceProvider();
+      return services.BuildServiceProvider();
     }
   }
 }

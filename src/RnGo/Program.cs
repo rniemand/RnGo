@@ -20,6 +20,7 @@ builder.Services
   // Services
   .AddSingleton<ILinkService, LinkService>()
   .AddSingleton<ILinkStorageService, LinkStorageService>()
+  .AddSingleton<ILinkStatsService, LinkStatsService>()
 
   // Helpers
   .AddSingleton<IStringHelper, StringHelper>()
@@ -30,7 +31,8 @@ builder.Services
   .AddSingleton<IDirectoryAbstraction, DirectoryAbstraction>()
   .AddSingleton<IEnvironmentAbstraction, EnvironmentAbstraction>()
   .AddSingleton<IPathAbstraction, PathAbstraction>()
-  
+  .AddSingleton<IDateTimeAbstraction, DateTimeAbstraction>()
+
   // Providers
   .AddSingleton<IRnGoConfigProvider, RnGoConfigProvider>();
 

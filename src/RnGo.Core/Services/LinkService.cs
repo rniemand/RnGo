@@ -14,20 +14,27 @@ namespace RnGo.Core.Services
   {
     private readonly ILogger<LinkService> _logger;
     private readonly ILinkStorageService _linkStore;
+    private readonly ILinkStatsService _statsService;
 
     public LinkService(
       ILogger<LinkService> logger,
-      ILinkStorageService linkStore)
+      ILinkStorageService linkStore,
+      ILinkStatsService statsService)
     {
       // TODO: [LinkService] (TESTS) Add tests
       _logger = logger;
       _linkStore = linkStore;
+      _statsService = statsService;
     }
 
     public async Task<RnGoLink?> Resolve(string shortCode)
     {
       // TODO: [LinkService.Resolve] (TESTS) Add tests
       var link = await _linkStore.GetByShortCode(shortCode);
+
+      if (link is not null)
+        await _statsService.RecordLinkFollow(link);
+
       return link ?? null;
     }
 

@@ -6,6 +6,6 @@ new RnGoDevelopment()
   //.Base64Encode()
   //.GenerateLinkString(1258741)
   //.StoreLink()
-  //.ResolveLink("1")
-  .GetLinkCount()
+  .ResolveLink("1")
+  //.GetLinkCount()
   .DoNothing();
