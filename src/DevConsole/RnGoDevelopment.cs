@@ -67,7 +67,7 @@ namespace DevConsole
     public RnGoDevelopment StoreLink()
     {
       var linkService = _services.GetRequiredService<ILinkService>();
-      var link = new ResolvedLink
+      var link = new RnGoLink
       {
         Url = "https://www.google.com/?q=3"
       };

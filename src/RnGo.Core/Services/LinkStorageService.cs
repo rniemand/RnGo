@@ -10,9 +10,9 @@ namespace RnGo.Core.Services
 {
   public interface ILinkStorageService
   {
-    Task<ResolvedLink?> GetByUrl(string url);
-    Task<string> StoreLink(ResolvedLink link);
-    Task<ResolvedLink?> GetByShortCode(string shortCode);
+    Task<RnGoLink?> GetByUrl(string url);
+    Task<string> StoreLink(RnGoLink link);
+    Task<RnGoLink?> GetByShortCode(string shortCode);
     Task<int> GetLinkCount();
   }
 
@@ -25,7 +25,7 @@ namespace RnGo.Core.Services
     private readonly IJsonHelper _jsonHelper;
     private readonly IStringHelper _stringHelper;
     private readonly string _storageFilePath;
-    private readonly Dictionary<string, ResolvedLink> _links;
+    private readonly Dictionary<string, RnGoLink> _links;
     private long _nextLinkId;
 
     public LinkStorageService(
@@ -44,7 +44,7 @@ namespace RnGo.Core.Services
       _stringHelper = stringHelper;
       _nextLinkId = 0;
 
-      _links = new Dictionary<string, ResolvedLink>();
+      _links = new Dictionary<string, RnGoLink>();
       _config = configProvider.Provide();
 
       _storageFilePath = "{root}links.store.json"
@@ -55,7 +55,7 @@ namespace RnGo.Core.Services
       InitializeStorage();
     }
 
-    public async Task<ResolvedLink?> GetByUrl(string url)
+    public async Task<RnGoLink?> GetByUrl(string url)
     {
       // TODO: [LinkStorageService.GetByUrl] (TESTS) Add tests
       if (string.IsNullOrWhiteSpace(url))
@@ -71,7 +71,7 @@ namespace RnGo.Core.Services
       return value ?? null;
     }
 
-    public async Task<string> StoreLink(ResolvedLink link)
+    public async Task<string> StoreLink(RnGoLink link)
     {
       // TODO: [LinkStorageService.StoreLink] (TESTS) Add tests
       link.LinkId = _nextLinkId++;
@@ -85,7 +85,7 @@ namespace RnGo.Core.Services
       return shortCode;
     }
 
-    public async Task<ResolvedLink?> GetByShortCode(string shortCode)
+    public async Task<RnGoLink?> GetByShortCode(string shortCode)
     {
       // TODO: [LinkStorageService.GetByShortCode] (TESTS) Add tests
       var upperCode = shortCode.ToUpper();
@@ -117,7 +117,7 @@ namespace RnGo.Core.Services
     private void CreateInitialStorageFile()
     {
       // TODO: [LinkStorageService.CreateInitialStorageFile] (TESTS) Add tests
-      var links = new List<ResolvedLink>();
+      var links = new List<RnGoLink>();
       var linksJson = _jsonHelper.SerializeObject(links, true);
       _file.WriteAllText(_storageFilePath, linksJson);
     }
@@ -132,7 +132,7 @@ namespace RnGo.Core.Services
         throw new Exception($"Unable to load storage file: {_storageFilePath}");
 
       var fileJson = _file.ReadAllText(_storageFilePath);
-      var fileLinks = _jsonHelper.DeserializeObject<List<ResolvedLink>>(fileJson);
+      var fileLinks = _jsonHelper.DeserializeObject<List<RnGoLink>>(fileJson);
       
       _links.Clear();
       foreach (var link in fileLinks)

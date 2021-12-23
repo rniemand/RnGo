@@ -16,7 +16,7 @@ namespace RnGo.Controllers
     }
 
     [HttpPost, Route("")]
-    public async Task<string> StoreLink(ResolvedLink link)
+    public async Task<string> StoreLink(RnGoLink link)
     {
       // TODO: [LinkController.StoreLink] (TESTS) Add tests
       return await _linkService.StoreLink(link);

@@ -5,8 +5,8 @@ namespace RnGo.Core.Services
 {
   public interface ILinkService
   {
-    Task<ResolvedLink?> Resolve(string shortCode);
-    Task<string> StoreLink(ResolvedLink link);
+    Task<RnGoLink?> Resolve(string shortCode);
+    Task<string> StoreLink(RnGoLink link);
     Task<int> GetLinkCount();
   }
 
@@ -24,14 +24,14 @@ namespace RnGo.Core.Services
       _linkStore = linkStore;
     }
 
-    public async Task<ResolvedLink?> Resolve(string shortCode)
+    public async Task<RnGoLink?> Resolve(string shortCode)
     {
       // TODO: [LinkService.Resolve] (TESTS) Add tests
       var link = await _linkStore.GetByShortCode(shortCode);
       return link ?? null;
     }
 
-    public async Task<string> StoreLink(ResolvedLink link)
+    public async Task<string> StoreLink(RnGoLink link)
     {
       // TODO: [LinkService.StoreLink] (TESTS) Add tests
       if (!IsValidLink(link))
@@ -51,7 +51,7 @@ namespace RnGo.Core.Services
     }
 
     // Internal
-    private bool IsValidLink(ResolvedLink? link)
+    private bool IsValidLink(RnGoLink? link)
     {
       // TODO: [LinkService.IsValidLink] (TESTS) Add tests
       if (link is null)

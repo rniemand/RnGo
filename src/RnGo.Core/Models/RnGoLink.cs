@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace RnGo.Core.Models
 {
-  public class ResolvedLink
+  public class RnGoLink
   {
     [JsonProperty("u"), JsonPropertyName("u")]
     public string Url { get; set; }
@@ -14,9 +14,9 @@ namespace RnGo.Core.Models
     [JsonProperty("s"), JsonPropertyName("s")]
     public string ShortCode { get; set; }
 
-    public ResolvedLink()
+    public RnGoLink()
     {
-      // TODO: [ResolvedLink] (TESTS) Add tests
+      // TODO: [RnGoLink] (TESTS) Add tests
       Url = string.Empty;
       LinkId = 0;
       ShortCode = string.Empty;
