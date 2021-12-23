@@ -79,14 +79,8 @@ namespace RnGo.Core.Services
       // TODO: [LinkStorageService.StoreLink] (TESTS) Add tests
       var linkId = _nextLinkId++;
       var shortCode = _stringHelper.GenerateLinkString(linkId);
-
-      var linkEntity = new LinkEntity
-      {
-        LinkId = linkId,
-        ShortCode = shortCode,
-        Url = url
-      };
-
+      var linkEntity = new LinkEntity(url, shortCode);
+      
       // Add the link to the DB
       var rowCount = await _linkRepo.AddLink(linkEntity);
       if (rowCount <= 0)
@@ -96,16 +90,13 @@ namespace RnGo.Core.Services
       }
 
       // Fetch the generated link from the DB
+      var dbLink = await _linkRepo.GetById(linkEntity.LinkId);
+      if (dbLink is not null)
+        return dbLink.ShortCode;
 
-
-
-      var link = new RnGoLink(url, linkId, shortCode);
-      
-      _links[shortCode.ToUpper()] = link;
-      SaveLinks();
-
-      await Task.CompletedTask;
-      return shortCode;
+      // Failed to store the DB link
+      _logger.LogError("Failed to store link: {url}", url);
+      return string.Empty;
     }
 
     public async Task<RnGoLink?> GetByShortCode(string shortCode)

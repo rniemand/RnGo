@@ -9,6 +9,7 @@ namespace RnGo.Core.Repositories
     Task<int> AddLink(LinkEntity entity);
     Task<LinkEntity?> GetByUrl(string url);
     Task<GenericCountEntity?> GetMaxLinkId();
+    Task<LinkEntity?> GetById(long linkId);
   }
 
   public class LinkRepo : BaseRepo<LinkRepo>, ILinkRepo
@@ -49,6 +50,16 @@ namespace RnGo.Core.Repositories
       return await GetSingle<GenericCountEntity>(
         nameof(GetMaxLinkId),
         _queries.GetMaxLinkId()
+      );
+    }
+
+    public async Task<LinkEntity?> GetById(long linkId)
+    {
+      // TODO: [LinkRepo.GetById] (TESTS) Add tests
+      return await GetSingle<LinkEntity>(
+        nameof(GetById),
+        _queries.GetById(),
+        new {LinkId = linkId}
       );
     }
   }

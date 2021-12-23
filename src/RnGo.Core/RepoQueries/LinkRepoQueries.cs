@@ -5,6 +5,7 @@
     string AddLink();
     string GetByUrl();
     string GetMaxLinkId();
+    string GetById();
   }
   
   public class LinkRepoQueries : ILinkRepoQueries
@@ -29,6 +30,11 @@
     public string GetMaxLinkId()
     {
       return @"SELECT MAX(`LinkId`) AS 'CountLong' FROM `Links`";
+    }
+
+    public string GetById()
+    {
+      return @"SELECT * FROM `Links` WHERE `LinkId` = @LinkId";
     }
   }
 }

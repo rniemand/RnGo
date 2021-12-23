@@ -19,5 +19,13 @@
       ShortCode = string.Empty;
       Url = string.Empty;
     }
+
+    public LinkEntity(string url, string shortCode)
+      : this()
+    {
+      // TODO: [LinkEntity] (TESTS) Add tests
+      Url = url;
+      ShortCode = shortCode;
+    }
 	}
 }
