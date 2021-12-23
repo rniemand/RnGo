@@ -64,20 +64,20 @@ namespace DevConsole
       return this;
     }
 
-    public RnGoDevelopment StoreLink()
+    public RnGoDevelopment AddLink(string url, string? apiKey = null)
     {
       var linkService = _services.GetRequiredService<ILinkService>();
-      var link = new RnGoLink
-      {
-        Url = "https://www.google.com/?q=3"
-      };
-
-      var result = linkService
-        .StoreLink(link)
+      
+      var response = linkService
+        .AddLink(new AddLinkRequest
+        {
+          Url = url,
+          ApiKey = apiKey ?? "18A8B66F-B4F1-4814-8771-D1EABD9CFB43"
+        })
         .GetAwaiter()
         .GetResult();
 
-      Console.WriteLine($"Stored as '{result}'");
+      Console.WriteLine($"Stored as '{response.ShortCode}'");
 
       return this;
     }
@@ -137,6 +137,7 @@ namespace DevConsole
         .AddSingleton<ILinkService, LinkService>()
         .AddSingleton<ILinkStorageService, LinkStorageService>()
         .AddSingleton<ILinkStatsService, LinkStatsService>()
+        .AddSingleton<IApiKeyService, ApiKeyService>()
 
         // Helpers
         .AddSingleton<IStringHelper, StringHelper>()
