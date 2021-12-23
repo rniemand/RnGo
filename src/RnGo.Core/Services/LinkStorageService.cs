@@ -79,6 +79,26 @@ namespace RnGo.Core.Services
       // TODO: [LinkStorageService.StoreLink] (TESTS) Add tests
       var linkId = _nextLinkId++;
       var shortCode = _stringHelper.GenerateLinkString(linkId);
+
+      var linkEntity = new LinkEntity
+      {
+        LinkId = linkId,
+        ShortCode = shortCode,
+        Url = url
+      };
+
+      // Add the link to the DB
+      var rowCount = await _linkRepo.AddLink(linkEntity);
+      if (rowCount <= 0)
+      {
+        _logger.LogError("Failed to store link: {url}", url);
+        return string.Empty;
+      }
+
+      // Fetch the generated link from the DB
+
+
+
       var link = new RnGoLink(url, linkId, shortCode);
       
       _links[shortCode.ToUpper()] = link;
@@ -128,23 +148,17 @@ namespace RnGo.Core.Services
     private void LoadStorageFile()
     {
       // TODO: [LinkStorageService.LoadStorageFile] (TESTS) Add tests
-      if (!_file.Exists(_storageFilePath))
-        CreateInitialStorageFile();
+      _nextLinkId = 1;
+      var countEntity = _linkRepo.GetMaxLinkId().GetAwaiter().GetResult();
 
-      if (!_file.Exists(_storageFilePath))
-        throw new Exception($"Unable to load storage file: {_storageFilePath}");
+      if(countEntity is null)
+        return;
 
-      var fileJson = _file.ReadAllText(_storageFilePath);
-      var fileLinks = _jsonHelper.DeserializeObject<List<RnGoLink>>(fileJson);
-      
-      _links.Clear();
-      foreach (var link in fileLinks)
+      _nextLinkId = countEntity.CountLong;
+      if (_nextLinkId <= 0)
       {
-        if (string.IsNullOrWhiteSpace(link.ShortCode))
-          link.ShortCode = _stringHelper.GenerateLinkString(link.LinkId);
-
-        _links[link.ShortCode.ToUpper()] = link;
-        if (link.LinkId > _nextLinkId) _nextLinkId = link.LinkId;
+        _nextLinkId = 1;
+        return;
       }
 
       _nextLinkId += 1;

@@ -7,7 +7,6 @@ new RnGoDevelopment()
   //.GenerateLinkString(1258741)
   //.AddLink("http://192.168.0.60:7071/swagger/index.html")
   //.AddDatabaseLink()
-  .GetLinkByUrl()
-  //.ResolveLink("1")
+  .ResolveLink("1")
   //.GetLinkCount()
   .DoNothing();

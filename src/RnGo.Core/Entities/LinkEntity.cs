@@ -2,7 +2,7 @@
 {
   public class LinkEntity
   {
-    public int LinkId { get; set; }
+    public long LinkId { get; set; }
     public bool Deleted { get; set; }
     public DateTime DateAddedUtc { get; set; }
     public DateTime DateLastFollowedUtc { get; set; }
