@@ -9,13 +9,7 @@ namespace RnGo.Core.Configuration
 
     [JsonProperty("RootDirectory"), JsonPropertyName("RootDirectory")]
     public string RootDirectory { get; set; }
-
-    [JsonProperty("StorageDirectory"), JsonPropertyName("StorageDirectory")]
-    public string StorageDirectory { get; set; }
-
-    [JsonProperty("StatsDirectory"), JsonPropertyName("StatsDirectory")]
-    public string StatsDirectory { get; set; }
-
+    
     [JsonProperty("ApiKeys"), JsonPropertyName("ApiKeys")]
     public string[] ApiKeys { get; set; }
 
@@ -23,8 +17,6 @@ namespace RnGo.Core.Configuration
     {
       // TODO: [RnGoConfig] (TESTS) Add tests
       RootDirectory = "./";
-      StorageDirectory = "{root}storage";
-      StatsDirectory = "{storage}stats";
       ApiKeys = Array.Empty<string>();
     }
   }
