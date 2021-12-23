@@ -21,5 +21,22 @@ namespace RnGo.Core.Models.Responses
       Messages = Array.Empty<string>();
       ShortCode = string.Empty;
     }
+
+    public AddLinkResponse WithFailure(string message)
+    {
+      // TODO: [AddLinkResponse] (TESTS) Add tests
+      Success = false;
+      Messages = new[] {message};
+      return this;
+    }
+
+    public AddLinkResponse WithSuccess(string shortCode)
+    {
+      // TODO: [AddLinkResponse] (TESTS) Add tests
+      Success = true;
+      ShortCode = shortCode;
+
+      return this;
+    }
   }
 }

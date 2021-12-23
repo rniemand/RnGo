@@ -64,16 +64,16 @@ namespace DevConsole
       return this;
     }
 
-    public RnGoDevelopment StoreLink()
+    public RnGoDevelopment StoreLink(string url)
     {
       var linkService = _services.GetRequiredService<ILinkService>();
-      var link = new RnGoLink
-      {
-        Url = "https://www.google.com/?q=3"
-      };
-
+      
       var result = linkService
-        .StoreLink(link)
+        .AddLink(new AddLinkRequest
+        {
+          Url = url,
+          ApiKey = "3349B5FC-04F3-4849-8623-428CDE172C81"
+        })
         .GetAwaiter()
         .GetResult();
 

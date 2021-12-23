@@ -1,12 +1,13 @@
 ﻿using Microsoft.Extensions.Logging;
 using RnGo.Core.Models;
+using RnGo.Core.Models.Responses;
 
 namespace RnGo.Core.Services
 {
   public interface ILinkService
   {
     Task<RnGoLink?> Resolve(string shortCode);
-    Task<string> StoreLink(RnGoLink link);
+    Task<AddLinkResponse> AddLink(AddLinkRequest request);
     Task<int> GetLinkCount();
   }
 
@@ -38,17 +39,24 @@ namespace RnGo.Core.Services
       return link ?? null;
     }
 
-    public async Task<string> StoreLink(RnGoLink link)
+    public async Task<AddLinkResponse> AddLink(AddLinkRequest request)
     {
       // TODO: [LinkService.StoreLink] (TESTS) Add tests
-      if (!IsValidLink(link))
-        return string.Empty;
+      var response = new AddLinkResponse();
 
-      var resolvedLink = await _linkStore.GetByUrl(link.Url);
-      if (resolvedLink is null)
-        return await _linkStore.StoreLink(link);
+      if (!IsValidLink(request.Url))
+        return response.WithFailure("Invalid URL");
 
-      return resolvedLink.ShortCode;
+      // Check for an already existing link first
+      var existingLink = await _linkStore.GetByUrl(request.Url);
+      if (existingLink is not null)
+        return response.WithSuccess(existingLink.ShortCode);
+
+      // This is a new link, add it
+      var addedLink = await _linkStore.StoreLink(request.Url);
+      return string.IsNullOrWhiteSpace(addedLink) 
+        ? response.WithFailure("Failed to add link") 
+        : response.WithSuccess(addedLink);
     }
 
     public async Task<int> GetLinkCount()
@@ -58,17 +66,11 @@ namespace RnGo.Core.Services
     }
 
     // Internal
-    private bool IsValidLink(RnGoLink? link)
+    private static bool IsValidLink(string link)
     {
       // TODO: [LinkService.IsValidLink] (TESTS) Add tests
-      if (link is null)
-        return false;
-
-      // ReSharper disable once ConvertIfStatementToReturnStatement
-      if (string.IsNullOrWhiteSpace(link.Url))
-        return false;
-
-      return true;
+      // TODO: [LinkService.IsValidLink] (EXPAND) Add better validation logic here
+      return !string.IsNullOrWhiteSpace(link);
     }
   }
 }

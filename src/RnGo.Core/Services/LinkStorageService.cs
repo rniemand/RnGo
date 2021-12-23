@@ -11,7 +11,7 @@ namespace RnGo.Core.Services
   public interface ILinkStorageService
   {
     Task<RnGoLink?> GetByUrl(string url);
-    Task<string> StoreLink(RnGoLink link);
+    Task<string> StoreLink(string link);
     Task<RnGoLink?> GetByShortCode(string shortCode);
     Task<int> GetLinkCount();
   }
@@ -71,12 +71,12 @@ namespace RnGo.Core.Services
       return value ?? null;
     }
 
-    public async Task<string> StoreLink(RnGoLink link)
+    public async Task<string> StoreLink(string url)
     {
       // TODO: [LinkStorageService.StoreLink] (TESTS) Add tests
-      link.LinkId = _nextLinkId++;
-      var shortCode = _stringHelper.GenerateLinkString(link.LinkId);
-      link.ShortCode = shortCode;
+      var linkId = _nextLinkId++;
+      var shortCode = _stringHelper.GenerateLinkString(linkId);
+      var link = new RnGoLink(url, linkId, shortCode);
       
       _links[shortCode.ToUpper()] = link;
       SaveLinks();

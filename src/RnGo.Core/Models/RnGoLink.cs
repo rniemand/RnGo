@@ -21,5 +21,14 @@ namespace RnGo.Core.Models
       LinkId = 0;
       ShortCode = string.Empty;
     }
+
+    public RnGoLink(string url, long linkId, string shortCode)
+      : this()
+    {
+      // TODO: [RnGoLink] (TESTS) Add tests
+      Url = url;
+      LinkId = linkId;
+      ShortCode = shortCode;
+    }
   }
 }

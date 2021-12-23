@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RnGo.Core.Models;
+using RnGo.Core.Models.Responses;
 using RnGo.Core.Services;
 
 namespace RnGo.Controllers
@@ -16,10 +17,10 @@ namespace RnGo.Controllers
     }
 
     [HttpPost, Route("")]
-    public async Task<string> StoreLink(RnGoLink link)
+    public async Task<AddLinkResponse> StoreLink([FromBody] AddLinkRequest request)
     {
       // TODO: [LinkController.StoreLink] (TESTS) Add tests
-      return await _linkService.StoreLink(link);
+      return await _linkService.AddLink(request);
     }
 
     [HttpGet, Route("count")]
