@@ -126,7 +126,7 @@ namespace DevConsole
       var repo = _services.GetRequiredService<ILinkRepo>();
 
       var dbLink = repo
-        .GetByUrl("https://docs.google.com/spreadsheets")
+        .GetByUrl("https://docs.google.com/spreadsheetsr")
         .GetAwaiter()
         .GetResult();
 

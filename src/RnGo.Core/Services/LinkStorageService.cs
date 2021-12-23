@@ -2,8 +2,10 @@
 using Rn.NetCore.Common.Abstractions;
 using Rn.NetCore.Common.Helpers;
 using RnGo.Core.Configuration;
+using RnGo.Core.Entities;
 using RnGo.Core.Helpers;
 using RnGo.Core.Models;
+using RnGo.Core.Models.Dto;
 using RnGo.Core.Providers;
 using RnGo.Core.Repositories;
 
@@ -11,7 +13,7 @@ namespace RnGo.Core.Services
 {
   public interface ILinkStorageService
   {
-    Task<RnGoLink?> GetByUrl(string url);
+    Task<RnGoLinkDto?> GetByUrl(string url);
     Task<string> StoreLink(string link);
     Task<RnGoLink?> GetByShortCode(string shortCode);
     Task<int> GetLinkCount();
@@ -59,20 +61,17 @@ namespace RnGo.Core.Services
       InitializeStorage();
     }
 
-    public async Task<RnGoLink?> GetByUrl(string url)
+
+    // Interface methods
+    public async Task<RnGoLinkDto?> GetByUrl(string url)
     {
       // TODO: [LinkStorageService.GetByUrl] (TESTS) Add tests
       if (string.IsNullOrWhiteSpace(url))
         return null;
 
-      if (_links.Count == 0)
-        return null;
-
-      await Task.CompletedTask;
-      var (_, value) = _links
-        .FirstOrDefault(x => x.Value.Url.Equals(url));
-
-      return value ?? null;
+      return RnGoLinkDto.FromEntity(
+        await _linkRepo.GetByUrl(url)
+      );
     }
 
     public async Task<string> StoreLink(string url)
