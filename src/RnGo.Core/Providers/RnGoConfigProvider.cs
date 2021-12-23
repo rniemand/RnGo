@@ -38,14 +38,14 @@ namespace RnGo.Core.Providers
       {
         _config = new RnGoConfig();
         var section = _configuration.GetSection(RnGoConfig.Key);
-        if(section.Exists())
-          section.Bind(_config);
+        if(section.Exists()) section.Bind(_config);
       }
 
       // Generate paths
       _config.RootDirectory = GenerateRootDir(_config.RootDirectory);
       _config.StorageDirectory = GeneratePath(_config.StorageDirectory);
-      
+      _config.StatsDirectory = GeneratePath(_config.StatsDirectory);
+
       // Return bound config
       return _config;
     }
@@ -62,6 +62,7 @@ namespace RnGo.Core.Providers
       if (!_path.EndsInDirectorySeparator(fullPath))
         fullPath = _path.GetFullPath(fullPath + _path.DirectorySeparatorChar);
 
+      _logger.LogInformation("Setting {{root}} to: {path}", fullPath);
       return fullPath;
     }
 
@@ -75,12 +76,14 @@ namespace RnGo.Core.Providers
         path = "{root}" + path[2..];
 
       path = path
-        .Replace("{root}", _config.RootDirectory);
+        .Replace("{root}", _config.RootDirectory)
+        .Replace("{storage}", _config.StorageDirectory);
 
       var fullPath = _path.GetFullPath(path);
       if (!_path.EndsInDirectorySeparator(fullPath))
         fullPath = _path.GetFullPath(fullPath + _path.DirectorySeparatorChar);
 
+      _logger.LogDebug("Generate path: {path}", fullPath);
       return fullPath;
     }
   }
