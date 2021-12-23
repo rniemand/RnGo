@@ -130,6 +130,8 @@ namespace DevConsole
         .GetAwaiter()
         .GetResult();
 
+      Console.WriteLine(dbLink?.Url ?? "Not Found");
+
       return this;
     }
 
