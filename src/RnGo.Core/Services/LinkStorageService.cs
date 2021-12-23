@@ -1,12 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
-using Rn.NetCore.Common.Abstractions;
-using Rn.NetCore.Common.Helpers;
-using RnGo.Core.Configuration;
 using RnGo.Core.Entities;
 using RnGo.Core.Helpers;
-using RnGo.Core.Models;
 using RnGo.Core.Models.Dto;
-using RnGo.Core.Providers;
 using RnGo.Core.Repositories;
 
 namespace RnGo.Core.Services
@@ -16,47 +11,26 @@ namespace RnGo.Core.Services
     Task<RnGoLinkDto?> GetByUrl(string url);
     Task<string> StoreLink(string link);
     Task<LinkEntity?> GetByShortCode(string shortCode);
-    Task<int> GetLinkCount();
+    Task<long> GetLinkCount();
   }
 
   public class LinkStorageService : ILinkStorageService
   {
     private readonly ILogger<LinkStorageService> _logger;
-    private readonly RnGoConfig _config;
-    private readonly IDirectoryAbstraction _directory;
-    private readonly IFileAbstraction _file;
-    private readonly IJsonHelper _jsonHelper;
     private readonly IStringHelper _stringHelper;
     private readonly ILinkRepo _linkRepo;
-    private readonly string _storageFilePath;
     private long _nextLinkId;
 
     public LinkStorageService(
       ILogger<LinkStorageService> logger,
-      IRnGoConfigProvider configProvider,
-      IDirectoryAbstraction directory,
-      IFileAbstraction file,
-      IJsonHelper jsonHelper,
       IStringHelper stringHelper,
       ILinkRepo linkRepo)
     {
       // TODO: [LinkStorageService] (TESTS) Add tests
       _logger = logger;
-      _directory = directory;
-      _file = file;
-      _jsonHelper = jsonHelper;
       _stringHelper = stringHelper;
       _linkRepo = linkRepo;
       _nextLinkId = 0;
-      
-      _config = configProvider.Provide();
-
-      _storageFilePath = "{root}links.store.json"
-        .Replace("{root}", _config.StorageDirectory);
-
-      _logger.LogInformation("Setting data file path to: {path}", _storageFilePath);
-
-      InitializeStorage();
     }
 
 
@@ -103,76 +77,12 @@ namespace RnGo.Core.Services
       return await _linkRepo.GetByShortCode(shortCode);
     }
 
-    public async Task<int> GetLinkCount()
+    public async Task<long> GetLinkCount()
     {
       // TODO: [LinkStorageService.GetLinkCount] (TESTS) Add tests
-      await Task.CompletedTask;
-      return _links.Count;
-    }
+      var countEntity = await _linkRepo.GetMaxLinkId();
 
-
-    // Internal methods
-    private void InitializeStorage()
-    {
-      // TODO: [LinkStorageService.InitializeStorage] (TESTS) Add tests
-      if (!_directory.Exists(_config.StorageDirectory))
-        _directory.CreateDirectory(_config.StorageDirectory);
-
-      if (!_directory.Exists(_config.StorageDirectory))
-        throw new Exception($"Unable to find storage dir: {_config.StorageDirectory}");
-
-      LoadStorageFile();
-    }
-
-    private void CreateInitialStorageFile()
-    {
-      // TODO: [LinkStorageService.CreateInitialStorageFile] (TESTS) Add tests
-      var links = new List<RnGoLink>();
-      var linksJson = _jsonHelper.SerializeObject(links, true);
-      _file.WriteAllText(_storageFilePath, linksJson);
-    }
-
-    private void LoadStorageFile()
-    {
-      // TODO: [LinkStorageService.LoadStorageFile] (TESTS) Add tests
-      _nextLinkId = 1;
-      var countEntity = _linkRepo.GetMaxLinkId().GetAwaiter().GetResult();
-
-      if(countEntity is null)
-        return;
-
-      _nextLinkId = countEntity.CountLong;
-      if (_nextLinkId <= 0)
-      {
-        _nextLinkId = 1;
-        return;
-      }
-
-      _nextLinkId += 1;
-    }
-
-    private void BackupLinksFile()
-    {
-      // TODO: [LinkStorageService.BackupLinksFile] (TESTS) Add tests
-      var backupFile = $"{_storageFilePath}.backup";
-
-      if (_file.Exists(backupFile))
-        _file.Delete(backupFile);
-
-      _file.Move(_storageFilePath, backupFile);
-    }
-
-    private void SaveLinks()
-    {
-      // TODO: [LinkStorageService.SaveLinks] (TESTS) Add tests
-      BackupLinksFile();
-
-      var links = _links
-        .Select(link => link.Value)
-        .ToList();
-
-      var linksJson = _jsonHelper.SerializeObject(links);
-      _file.WriteAllText(_storageFilePath, linksJson);
+      return countEntity?.CountLong ?? 0;
     }
   }
 }

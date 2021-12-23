@@ -6,6 +6,7 @@
     public bool Deleted { get; set; }
     public DateTime DateAddedUtc { get; set; }
     public DateTime DateLastFollowedUtc { get; set; }
+    public int FollowCount { get; set; }
     public string ShortCode { get; set; }
     public string Url { get; set; }
 
@@ -16,6 +17,7 @@
       Deleted = false;
       DateAddedUtc = DateTime.UtcNow;
       DateLastFollowedUtc = DateTime.UtcNow;
+      FollowCount = 0;
       ShortCode = string.Empty;
       Url = string.Empty;
     }

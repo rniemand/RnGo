@@ -8,7 +8,7 @@ namespace RnGo.Core.Services
   {
     Task<string> Resolve(string shortCode);
     Task<AddLinkResponse> AddLink(AddLinkRequest request);
-    Task<int> GetLinkCount();
+    Task<long> GetLinkCount();
   }
 
   public class LinkService : ILinkService
@@ -69,7 +69,7 @@ namespace RnGo.Core.Services
         : response.WithSuccess(addedLink);
     }
 
-    public async Task<int> GetLinkCount()
+    public async Task<long> GetLinkCount()
     {
       // TODO: [LinkService.GetLinkCount] (TESTS) Add tests
       return await _linkStore.GetLinkCount();
