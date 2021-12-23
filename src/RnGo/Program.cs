@@ -4,8 +4,10 @@ using Rn.NetCore.Common.Helpers;
 using Rn.NetCore.DbCommon;
 using Rn.NetCore.DbCommon.Helpers;
 using Rn.NetCore.DbCommon.Interfaces;
+using Rn.NetCore.Metrics;
 using RnGo.Core.Helpers;
 using RnGo.Core.Providers;
+using RnGo.Core.Repositories;
 using RnGo.Core.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -40,9 +42,14 @@ builder.Services
   // Providers
   .AddSingleton<IRnGoConfigProvider, RnGoConfigProvider>()
 
-  // DB: Core
+  // Metrics
+  .AddSingleton<IMetricServiceUtils, MetricServiceUtils>()
+  .AddSingleton<IMetricService, MetricService>()
+
+  // Database
   .AddSingleton<IConnectionResolver>(new ConnectionResolver(builder.Configuration, "RnGo"))
-  .AddSingleton<IDbConnectionHelper, MySqlConnectionHelper>();
+  .AddSingleton<IDbConnectionHelper, MySqlConnectionHelper>()
+  .AddSingleton<ILinkRepo, LinkRepo>();
 
 var app = builder.Build();
 

@@ -5,6 +5,7 @@ using RnGo.Core.Configuration;
 using RnGo.Core.Helpers;
 using RnGo.Core.Models;
 using RnGo.Core.Providers;
+using RnGo.Core.Repositories;
 
 namespace RnGo.Core.Services
 {
@@ -24,6 +25,7 @@ namespace RnGo.Core.Services
     private readonly IFileAbstraction _file;
     private readonly IJsonHelper _jsonHelper;
     private readonly IStringHelper _stringHelper;
+    private readonly ILinkRepo _linkRepo;
     private readonly string _storageFilePath;
     private readonly Dictionary<string, RnGoLink> _links;
     private long _nextLinkId;
@@ -34,7 +36,8 @@ namespace RnGo.Core.Services
       IDirectoryAbstraction directory,
       IFileAbstraction file,
       IJsonHelper jsonHelper,
-      IStringHelper stringHelper)
+      IStringHelper stringHelper,
+      ILinkRepo linkRepo)
     {
       // TODO: [LinkStorageService] (TESTS) Add tests
       _logger = logger;
@@ -42,6 +45,7 @@ namespace RnGo.Core.Services
       _file = file;
       _jsonHelper = jsonHelper;
       _stringHelper = stringHelper;
+      _linkRepo = linkRepo;
       _nextLinkId = 0;
 
       _links = new Dictionary<string, RnGoLink>();

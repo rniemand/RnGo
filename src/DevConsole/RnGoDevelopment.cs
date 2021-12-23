@@ -8,9 +8,11 @@ using Rn.NetCore.Common.Logging;
 using Rn.NetCore.DbCommon;
 using Rn.NetCore.DbCommon.Helpers;
 using Rn.NetCore.DbCommon.Interfaces;
+using Rn.NetCore.Metrics;
 using RnGo.Core.Helpers;
 using RnGo.Core.Models;
 using RnGo.Core.Providers;
+using RnGo.Core.Repositories;
 using RnGo.Core.Services;
 
 namespace DevConsole
@@ -153,12 +155,17 @@ namespace DevConsole
         .AddSingleton<IPathAbstraction, PathAbstraction>()
         .AddSingleton<IDateTimeAbstraction, DateTimeAbstraction>()
 
+        // Metrics
+        .AddSingleton<IMetricServiceUtils, MetricServiceUtils>()
+        .AddSingleton<IMetricService, MetricService>()
+
         // Providers
         .AddSingleton<IRnGoConfigProvider, RnGoConfigProvider>()
 
-        // DB: Core
+        // Database
         .AddSingleton<IConnectionResolver>(new ConnectionResolver(config, "RnGo"))
-        .AddSingleton<IDbConnectionHelper, MySqlConnectionHelper>();
+        .AddSingleton<IDbConnectionHelper, MySqlConnectionHelper>()
+        .AddSingleton<ILinkRepo, LinkRepo>();
 
       return services.BuildServiceProvider();
     }

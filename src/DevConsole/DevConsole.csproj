@@ -14,6 +14,7 @@
     <PackageReference Include="NLog.Extensions.Logging" Version="1.7.4" />
     <PackageReference Include="Rn.NetCore.Common" Version="6.0.0.100" />
     <PackageReference Include="Rn.NetCore.DbCommon" Version="6.0.0.100" />
+    <PackageReference Include="Rn.NetCore.Metrics" Version="6.0.0.100" />
   </ItemGroup>
 
   <ItemGroup>
