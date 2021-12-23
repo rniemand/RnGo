@@ -1,6 +1,9 @@
 using NLog.Extensions.Logging;
 using Rn.NetCore.Common.Abstractions;
 using Rn.NetCore.Common.Helpers;
+using Rn.NetCore.DbCommon;
+using Rn.NetCore.DbCommon.Helpers;
+using Rn.NetCore.DbCommon.Interfaces;
 using RnGo.Core.Helpers;
 using RnGo.Core.Providers;
 using RnGo.Core.Services;
@@ -35,7 +38,11 @@ builder.Services
   .AddSingleton<IDateTimeAbstraction, DateTimeAbstraction>()
 
   // Providers
-  .AddSingleton<IRnGoConfigProvider, RnGoConfigProvider>();
+  .AddSingleton<IRnGoConfigProvider, RnGoConfigProvider>()
+
+  // DB: Core
+  .AddSingleton<IConnectionResolver>(new ConnectionResolver(builder.Configuration, "RnGo"))
+  .AddSingleton<IDbConnectionHelper, MySqlConnectionHelper>();
 
 var app = builder.Build();
 
