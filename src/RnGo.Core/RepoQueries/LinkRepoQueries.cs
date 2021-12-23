@@ -7,6 +7,7 @@
     string GetMaxLinkId();
     string GetById();
     string GetByShortCode();
+    string UpdateFollowCount();
   }
   
   public class LinkRepoQueries : ILinkRepoQueries
@@ -45,6 +46,16 @@
       WHERE
 	      l.`Deleted` = 0 AND
 	      l.`ShortCode` = @ShortCode";
+    }
+
+    public string UpdateFollowCount()
+    {
+      return @"UPDATE `Links` l
+      SET
+	      l.`FollowCount` = FollowCount + 1,
+	      l.`DateLastFollowedUtc` = utc_timestamp(6)
+      WHERE
+	      l.`LinkId` = @LinkId";
     }
   }
 }

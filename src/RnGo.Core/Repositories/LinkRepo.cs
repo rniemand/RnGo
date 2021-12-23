@@ -11,6 +11,7 @@ namespace RnGo.Core.Repositories
     Task<GenericCountEntity?> GetMaxLinkId();
     Task<LinkEntity?> GetById(long linkId);
     Task<LinkEntity?> GetByShortCode(string shortCode);
+    Task<int> UpdateFollowCount(long linkId);
   }
 
   public class LinkRepo : BaseRepo<LinkRepo>, ILinkRepo
@@ -71,6 +72,16 @@ namespace RnGo.Core.Repositories
         nameof(GetByShortCode),
         _queries.GetByShortCode(),
         new { ShortCode = shortCode }
+      );
+    }
+
+    public async Task<int> UpdateFollowCount(long linkId)
+    {
+      // TODO: [LinkRepo.UpdateFollowCount] (TESTS) Add tests
+      return await ExecuteAsync(
+        nameof(UpdateFollowCount),
+        _queries.UpdateFollowCount(),
+        new { LinkId = linkId }
       );
     }
   }
