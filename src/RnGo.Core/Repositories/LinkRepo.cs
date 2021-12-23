@@ -7,6 +7,7 @@ namespace RnGo.Core.Repositories
   public interface ILinkRepo
   {
     Task<int> AddLink(LinkEntity entity);
+    Task<LinkEntity> GetByUrl(string url);
   }
 
   public class LinkRepo : BaseRepo<LinkRepo>, ILinkRepo
@@ -28,6 +29,16 @@ namespace RnGo.Core.Repositories
         nameof(AddLink),
         _queries.AddLink(),
         entity
+      );
+    }
+
+    public async Task<LinkEntity> GetByUrl(string url)
+    {
+      // TODO: [LinkRepo.GetByUrl] (TESTS) Add tests
+      return await GetSingle<LinkEntity>(
+        nameof(GetByUrl),
+        _queries.GetByUrl(),
+        new {Url = url}
       );
     }
   }

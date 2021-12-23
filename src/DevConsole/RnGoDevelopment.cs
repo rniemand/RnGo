@@ -121,6 +121,18 @@ namespace DevConsole
       return this;
     }
 
+    public RnGoDevelopment GetLinkByUrl()
+    {
+      var repo = _services.GetRequiredService<ILinkRepo>();
+
+      var dbLink = repo
+        .GetByUrl("https://docs.google.com/spreadsheets")
+        .GetAwaiter()
+        .GetResult();
+
+      return this;
+    }
+
     public RnGoDevelopment GetLinkCount()
     {
       var urlCount = _services
