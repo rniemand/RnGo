@@ -14,7 +14,7 @@ namespace DevConsole
 {
   public class RnGoDevelopment
   {
-    private static IServiceProvider _services;
+    private static IServiceProvider? _services;
 
     public RnGoDevelopment()
     {
@@ -97,6 +97,19 @@ namespace DevConsole
       return this;
     }
 
+    public RnGoDevelopment GetLinkCount()
+    {
+      var urlCount = _services
+        .GetRequiredService<ILinkService>()
+        .GetLinkCount()
+        .GetAwaiter()
+        .GetResult();
+
+      Console.WriteLine("URL Count: {0}", urlCount);
+
+      return this;
+    }
+
     private static void ConfigureDI()
     {
       var services = new ServiceCollection();
@@ -119,15 +132,15 @@ namespace DevConsole
           loggingBuilder.SetMinimumLevel(LogLevel.Trace);
           loggingBuilder.AddNLog(config);
         })
-        
+
         // Services
         .AddSingleton<ILinkService, LinkService>()
         .AddSingleton<ILinkStorageService, LinkStorageService>()
-        
+
         // Helpers
         .AddSingleton<IStringHelper, StringHelper>()
         .AddSingleton<IJsonHelper, JsonHelper>()
-        
+
         // Abstractions
         .AddSingleton<IFileAbstraction, FileAbstraction>()
         .AddSingleton<IDirectoryAbstraction, DirectoryAbstraction>()

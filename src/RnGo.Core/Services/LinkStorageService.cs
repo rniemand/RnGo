@@ -13,6 +13,7 @@ namespace RnGo.Core.Services
     Task<ResolvedLink?> GetByUrl(string url);
     Task<string> StoreLink(ResolvedLink link);
     Task<ResolvedLink?> GetByShortCode(string shortCode);
+    Task<int> GetLinkCount();
   }
 
   public class LinkStorageService : ILinkStorageService
@@ -91,6 +92,14 @@ namespace RnGo.Core.Services
       await Task.CompletedTask;
       return !_links.ContainsKey(upperCode) ? null : _links[upperCode];
     }
+
+    public async Task<int> GetLinkCount()
+    {
+      // TODO: [LinkStorageService.GetLinkCount] (TESTS) Add tests
+      await Task.CompletedTask;
+      return _links.Count;
+    }
+
 
     // Internal methods
     private void InitializeStorage()

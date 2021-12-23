@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Logging;
-using RnGo.Core.Helpers;
 using RnGo.Core.Models;
 
 namespace RnGo.Core.Services
@@ -8,22 +7,20 @@ namespace RnGo.Core.Services
   {
     Task<ResolvedLink?> Resolve(string shortCode);
     Task<string> StoreLink(ResolvedLink link);
+    Task<int> GetLinkCount();
   }
 
   public class LinkService : ILinkService
   {
     private readonly ILogger<LinkService> _logger;
-    private readonly IStringHelper _stringHelper;
     private readonly ILinkStorageService _linkStore;
 
     public LinkService(
       ILogger<LinkService> logger,
-      IStringHelper stringHelper,
       ILinkStorageService linkStore)
     {
       // TODO: [LinkService] (TESTS) Add tests
       _logger = logger;
-      _stringHelper = stringHelper;
       _linkStore = linkStore;
     }
 
@@ -45,6 +42,12 @@ namespace RnGo.Core.Services
         return await _linkStore.StoreLink(link);
 
       return resolvedLink.ShortCode;
+    }
+
+    public async Task<int> GetLinkCount()
+    {
+      // TODO: [LinkService.GetLinkCount] (TESTS) Add tests
+      return await _linkStore.GetLinkCount();
     }
 
     // Internal
