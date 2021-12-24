@@ -64,7 +64,7 @@ namespace RnGo.Core.Services
       }
 
       // Fetch the generated link from the DB
-      var dbLink = await _linkRepo.GetById(linkEntity.LinkId);
+      var dbLink = await _linkRepo.GetById(linkId);
       if (dbLink is not null)
         return dbLink.ShortCode;
 
