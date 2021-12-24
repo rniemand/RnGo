@@ -2,7 +2,7 @@
 using RnGo.Core.Entities;
 using RnGo.Core.RepoQueries;
 
-namespace RnGo.Core.Repositories
+namespace RnGo.Core.Repos
 {
   public interface IApiKeyRepo
   {

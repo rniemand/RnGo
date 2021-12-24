@@ -2,7 +2,7 @@
 using RnGo.Core.Entities;
 using RnGo.Core.Helpers;
 using RnGo.Core.Models.Dto;
-using RnGo.Core.Repositories;
+using RnGo.Core.Repos;
 
 namespace RnGo.Core.Services
 {

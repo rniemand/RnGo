@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using RnGo.Core.Entities;
-using RnGo.Core.Repositories;
+using RnGo.Core.Repos;
 
 namespace RnGo.Core.Services
 {

@@ -9,7 +9,7 @@ using Rn.NetCore.Metrics;
 using RnGo.Core.Helpers;
 using RnGo.Core.Providers;
 using RnGo.Core.RepoQueries;
-using RnGo.Core.Repositories;
+using RnGo.Core.Repos;
 using RnGo.Core.Services;
 
 var builder = WebApplication.CreateBuilder(args);
