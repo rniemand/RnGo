@@ -185,7 +185,9 @@ namespace DevConsole
         .AddSingleton<IConnectionResolver>(new ConnectionResolver(config, "RnGo"))
         .AddSingleton<IDbConnectionHelper, MySqlConnectionHelper>()
         .AddSingleton<ILinkRepo, LinkRepo>()
-        .AddSingleton<ILinkRepoQueries, LinkRepoQueries>();
+        .AddSingleton<IApiKeyRepo, ApiKeyRepo>()
+        .AddSingleton<ILinkRepoQueries, LinkRepoQueries>()
+        .AddSingleton<IApiKeyRepoQueries, ApiKeyRepoQueries>();
 
       return services.BuildServiceProvider();
     }
