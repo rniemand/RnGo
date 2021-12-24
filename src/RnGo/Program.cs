@@ -1,6 +1,7 @@
 using NLog.Extensions.Logging;
 using Rn.NetCore.Common.Abstractions;
 using Rn.NetCore.Common.Helpers;
+using Rn.NetCore.Common.Logging;
 using Rn.NetCore.DbCommon;
 using Rn.NetCore.DbCommon.Helpers;
 using Rn.NetCore.DbCommon.Interfaces;
@@ -42,6 +43,7 @@ builder.Services
 
   // Providers
   .AddSingleton<IRnGoConfigProvider, RnGoConfigProvider>()
+  .AddSingleton(typeof(ILoggerAdapter<>), typeof(LoggerAdapter<>))
 
   // Metrics
   .AddSingleton<IMetricServiceUtils, MetricServiceUtils>()
