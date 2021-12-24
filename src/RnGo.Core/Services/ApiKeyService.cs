@@ -12,9 +12,9 @@ namespace RnGo.Core.Services
 
   public class ApiKeyService : IApiKeyService
   {
+    public List<string> ApiKeys { get; }
     private readonly ILogger<ApiKeyService> _logger;
     private readonly IApiKeyRepo _apiKeyRepo;
-    private readonly List<string> _apiKeys;
     private readonly RnGoConfig _config;
     private int _apiKeyCount;
 
@@ -23,19 +23,18 @@ namespace RnGo.Core.Services
       IRnGoConfigProvider configProvider,
       IApiKeyRepo apiKeyRepo)
     {
-      // TODO: [ApiKeyService] (TESTS) Add tests
       _logger = logger;
       _apiKeyRepo = apiKeyRepo;
 
       _config = configProvider.Provide();
-      _apiKeys = new List<string>();
+      ApiKeys = new List<string>();
       _apiKeyCount = 0;
 
       RefreshApiKeys();
     }
 
 
-    // Interface methods
+    // Public methods
     public async Task<bool> IsValidApiKey(string apiKey)
     {
       // TODO: [ApiKeyService.IsValidApiKey] (TESTS) Add tests
@@ -44,7 +43,7 @@ namespace RnGo.Core.Services
         return false;
 
       var upperKey = apiKey.ToUpper();
-      var isValid = _apiKeys.Any(x => x.Equals(upperKey));
+      var isValid = ApiKeys.Any(x => x.Equals(upperKey));
 
       if (!isValid)
       {
@@ -55,21 +54,21 @@ namespace RnGo.Core.Services
       return true;
     }
 
-
-    // Internal methods
-    private void RefreshApiKeys()
+    public void RefreshApiKeys()
     {
       // TODO: [ApiKeyService.RefreshApiKeys] (TESTS) Add tests
       // Will be extended out to revoke keys in the future
-      _apiKeys.Clear();
+      ApiKeys.Clear();
 
       LoadConfigApiKeys();
       LoadDatabaseApiKeys();
 
-      _apiKeyCount = _apiKeys.Count;
+      _apiKeyCount = ApiKeys.Count;
       _logger.LogInformation("Loaded {count} enabled API keys", _apiKeyCount);
     }
 
+
+    // Internal methods
     private void LoadConfigApiKeys()
     {
       // TODO: [ApiKeyService.LoadConfigApiKeys] (TESTS) Add tests
@@ -81,7 +80,7 @@ namespace RnGo.Core.Services
         return;
 
       _logger.LogDebug("Loaded {count} API keys from config", apiKeys.Count);
-      _apiKeys.AddRange(apiKeys);
+      ApiKeys.AddRange(apiKeys);
     }
 
     private void LoadDatabaseApiKeys()
@@ -96,7 +95,7 @@ namespace RnGo.Core.Services
         return;
       
       _logger.LogDebug("Loaded {count} API keys from the DB", apiKeys.Count);
-      _apiKeys.AddRange(apiKeys.Select(x => x.ApiKey));
+      ApiKeys.AddRange(apiKeys.Select(x => x.ApiKey));
     }
   }
 }
