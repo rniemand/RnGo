@@ -74,7 +74,7 @@ namespace DevConsole
     public RnGoDevelopment AddLink(string url, string? apiKey = null)
     {
       var linkService = _services.GetRequiredService<ILinkService>();
-      
+
       var response = linkService
         .AddLink(new AddLinkRequest
         {
@@ -120,7 +120,7 @@ namespace DevConsole
 
       return this;
     }
-    
+
     public RnGoDevelopment GetLinkCount()
     {
       var urlCount = _services
@@ -130,6 +130,21 @@ namespace DevConsole
         .GetResult();
 
       Console.WriteLine("URL Count: {0}", urlCount);
+
+      return this;
+    }
+
+    public RnGoDevelopment StoreApiKey(string apiKey)
+    {
+      var apiKeyRepo = _services.GetRequiredService<IApiKeyRepo>();
+      var apiKeyEntity = apiKeyRepo.GetByApiKey(apiKey).GetAwaiter().GetResult();
+      if (apiKeyEntity is null)
+      {
+        apiKeyRepo.Add(apiKey).GetAwaiter().GetResult();
+        apiKeyEntity = apiKeyRepo.GetByApiKey(apiKey).GetAwaiter().GetResult();
+      }
+
+      Console.WriteLine(apiKeyEntity.ApiKey);
 
       return this;
     }
@@ -185,7 +200,9 @@ namespace DevConsole
         .AddSingleton<IConnectionResolver>(new ConnectionResolver(config, "RnGo"))
         .AddSingleton<IDbConnectionHelper, MySqlConnectionHelper>()
         .AddSingleton<ILinkRepo, LinkRepo>()
-        .AddSingleton<ILinkRepoQueries, LinkRepoQueries>();
+        .AddSingleton<IApiKeyRepo, ApiKeyRepo>()
+        .AddSingleton<ILinkRepoQueries, LinkRepoQueries>()
+        .AddSingleton<IApiKeyRepoQueries, ApiKeyRepoQueries>();
 
       return services.BuildServiceProvider();
     }

@@ -53,7 +53,9 @@ builder.Services
   .AddSingleton<IConnectionResolver>(new ConnectionResolver(builder.Configuration, "RnGo"))
   .AddSingleton<IDbConnectionHelper, MySqlConnectionHelper>()
   .AddSingleton<ILinkRepo, LinkRepo>()
-  .AddSingleton<ILinkRepoQueries, LinkRepoQueries>();
+  .AddSingleton<IApiKeyRepo, ApiKeyRepo>()
+  .AddSingleton<ILinkRepoQueries, LinkRepoQueries>()
+  .AddSingleton<IApiKeyRepoQueries, ApiKeyRepoQueries>();
 
 var app = builder.Build();
 
