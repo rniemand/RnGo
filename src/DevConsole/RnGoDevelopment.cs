@@ -14,7 +14,7 @@ using RnGo.Core.Helpers;
 using RnGo.Core.Models;
 using RnGo.Core.Providers;
 using RnGo.Core.RepoQueries;
-using RnGo.Core.Repositories;
+using RnGo.Core.Repos;
 using RnGo.Core.Services;
 
 namespace DevConsole
