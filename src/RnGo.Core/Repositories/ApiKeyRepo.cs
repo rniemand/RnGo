@@ -1,10 +1,13 @@
 ﻿using Rn.NetCore.DbCommon;
+using RnGo.Core.Entities;
 using RnGo.Core.RepoQueries;
 
 namespace RnGo.Core.Repositories
 {
   public interface IApiKeyRepo
   {
+    Task<int> Add(string apiKey);
+    Task<ApiKeyEntity?> GetByApiKey(string apiKey);
   }
 
   public class ApiKeyRepo : BaseRepo<ApiKeyRepo>, IApiKeyRepo
@@ -14,8 +17,29 @@ namespace RnGo.Core.Repositories
     public ApiKeyRepo(IServiceProvider serviceProvider, IApiKeyRepoQueries queries)
       : base(serviceProvider)
     {
-      _queries = queries;
       // TODO: [ApiKeyRepo] (TESTS) Add tests
+      _queries = queries;
+
+    }
+
+    public async Task<int> Add(string apiKey)
+    {
+      // TODO: [ApiKeyRepo.Add] (TESTS) Add tests
+      return await ExecuteAsync(
+        nameof(Add),
+        _queries.Add(),
+        new {ApiKey = apiKey}
+      );
+    }
+
+    public async Task<ApiKeyEntity?> GetByApiKey(string apiKey)
+    {
+      // TODO: [ApiKeyRepo.GetByApiKey] (TESTS) Add tests
+      return await GetSingle<ApiKeyEntity>(
+        nameof(GetByApiKey),
+        _queries.GetByApiKey(),
+        new {ApiKey = apiKey}
+      );
     }
   }
 }
