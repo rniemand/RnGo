@@ -30,7 +30,9 @@ namespace RnGo.Core.Services
       _logger = logger;
       _stringHelper = stringHelper;
       _linkRepo = linkRepo;
-      _nextLinkId = 0;
+      _nextLinkId = GetNextLinkId();
+
+      logger.LogInformation("Setting next linkId to {id}", _nextLinkId);
     }
 
 
@@ -83,6 +85,22 @@ namespace RnGo.Core.Services
       var countEntity = await _linkRepo.GetMaxLinkId();
 
       return countEntity?.CountLong ?? 0;
+    }
+
+
+    // Internal methods
+    private long GetNextLinkId()
+    {
+      // TODO: [LinkStorageService.GetNextLinkId] (TESTS) Add tests
+      var countEntity = _linkRepo.GetMaxLinkId().GetAwaiter().GetResult();
+      if (countEntity is null)
+        return 1;
+
+      var nextLinkId = countEntity.CountLong;
+      if (nextLinkId <= 0)
+        return 1;
+
+      return nextLinkId + 1;
     }
   }
 }

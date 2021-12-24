@@ -11,6 +11,19 @@ CREATE TABLE `Links` (
 )
 COLLATE='utf8_general_ci'
 ENGINE=InnoDB
-AUTO_INCREMENT=4
+AUTO_INCREMENT=1
 ;
 
+CREATE TABLE `ApiKeys` (
+	`ApiKeyId` INT(11) NOT NULL AUTO_INCREMENT,
+	`DateAddedUtc` DATETIME NOT NULL DEFAULT utc_timestamp(6),
+	`Deleted` BIT(1) NOT NULL DEFAULT b'0',
+	`Enabled` BIT(1) NOT NULL DEFAULT b'1',
+	`ApiKey` VARCHAR(50) NOT NULL DEFAULT '' COLLATE 'utf8_general_ci',
+	PRIMARY KEY (`ApiKeyId`) USING BTREE,
+	INDEX `Deleted` (`Deleted`) USING BTREE,
+	INDEX `Enabled` (`Enabled`) USING BTREE
+)
+COLLATE='utf8_general_ci'
+ENGINE=InnoDB
+;
