@@ -18,12 +18,12 @@ namespace RnGo.Controllers
     public async Task<ActionResult> Get(string shortCode)
     {
       // TODO: [FollowController.Get] (TESTS) Add tests
-      var resolvedLink = await _linkService.Resolve(shortCode);
+      var resolvedUrl = await _linkService.Resolve(shortCode);
 
-      if (resolvedLink is null)
-        return NotFound();
+      if (string.IsNullOrWhiteSpace(resolvedUrl))
+        return BadRequest();
 
-      return Redirect(resolvedLink.Url);
+      return Redirect(resolvedUrl);
     }
   }
 }

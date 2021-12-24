@@ -22,6 +22,8 @@
     <PackageReference Include="NLog" Version="4.7.13" />
     <PackageReference Include="NLog.Web.AspNetCore" Version="4.14.0" />
     <PackageReference Include="Rn.NetCore.Common" Version="6.0.0.100" />
+    <PackageReference Include="Rn.NetCore.DbCommon" Version="6.0.0.100" />
+    <PackageReference Include="Rn.NetCore.Metrics" Version="6.0.0.100" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
   </ItemGroup>
 

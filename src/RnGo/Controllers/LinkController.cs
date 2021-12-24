@@ -24,7 +24,7 @@ namespace RnGo.Controllers
     }
 
     [HttpGet, Route("count")]
-    public async Task<int> GetLinkCount()
+    public async Task<long> GetLinkCount()
     {
       // TODO: [LinkController.GetLinkCount] (TESTS) Add tests
       return await _linkService.GetLinkCount();

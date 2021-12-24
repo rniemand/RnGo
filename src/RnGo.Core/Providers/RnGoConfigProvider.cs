@@ -16,7 +16,7 @@ namespace RnGo.Core.Providers
     private readonly IConfiguration _configuration;
     private readonly IEnvironmentAbstraction _environment;
     private readonly IPathAbstraction _path;
-    private RnGoConfig? _config = null;
+    private RnGoConfig? _config;
 
     public RnGoConfigProvider(
       ILogger<RnGoConfigProvider> logger,
@@ -43,8 +43,6 @@ namespace RnGo.Core.Providers
 
       // Generate paths
       _config.RootDirectory = GenerateRootDir(_config.RootDirectory);
-      _config.StorageDirectory = GeneratePath(_config.StorageDirectory);
-      _config.StatsDirectory = GeneratePath(_config.StatsDirectory);
 
       // Return bound config
       return _config;
@@ -63,27 +61,6 @@ namespace RnGo.Core.Providers
         fullPath = _path.GetFullPath(fullPath + _path.DirectorySeparatorChar);
 
       _logger.LogInformation("Setting {{root}} to: {path}", fullPath);
-      return fullPath;
-    }
-
-    private string GeneratePath(string path)
-    {
-      // TODO: [RnGoConfigProvider.GeneratePath] (TESTS) Add tests
-      if (string.IsNullOrWhiteSpace(path) || _config is null)
-        return path;
-
-      if (path.StartsWith("./"))
-        path = "{root}" + path[2..];
-
-      path = path
-        .Replace("{root}", _config.RootDirectory)
-        .Replace("{storage}", _config.StorageDirectory);
-
-      var fullPath = _path.GetFullPath(path);
-      if (!_path.EndsInDirectorySeparator(fullPath))
-        fullPath = _path.GetFullPath(fullPath + _path.DirectorySeparatorChar);
-
-      _logger.LogDebug("Generate path: {path}", fullPath);
       return fullPath;
     }
   }
