@@ -8,6 +8,7 @@ namespace RnGo.Core.Repositories
   {
     Task<int> Add(string apiKey);
     Task<ApiKeyEntity?> GetByApiKey(string apiKey);
+    Task<List<ApiKeyEntity>> GetEnabledApiKeys();
   }
 
   public class ApiKeyRepo : BaseRepo<ApiKeyRepo>, IApiKeyRepo
@@ -39,6 +40,15 @@ namespace RnGo.Core.Repositories
         nameof(GetByApiKey),
         _queries.GetByApiKey(),
         new {ApiKey = apiKey}
+      );
+    }
+
+    public async Task<List<ApiKeyEntity>> GetEnabledApiKeys()
+    {
+      // TODO: [ApiKeyRepo.GetEnabledApiKeys] (TESTS) Add tests
+      return await GetList<ApiKeyEntity>(
+        nameof(GetEnabledApiKeys),
+        _queries.GetEnabledApiKeys()
       );
     }
   }

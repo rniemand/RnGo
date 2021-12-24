@@ -4,6 +4,7 @@
   {
     string Add();
     string GetByApiKey();
+    string GetEnabledApiKeys();
   }
 
   public class ApiKeyRepoQueries : IApiKeyRepoQueries
@@ -23,6 +24,15 @@
       WHERE
 	      a.`Deleted` = 0 AND
 	      a.`ApiKey` = @ApiKey";
+    }
+
+    public string GetEnabledApiKeys()
+    {
+      return @"SELECT *
+      FROM `ApiKeys` a
+      WHERE
+	      a.`Deleted` = 0 AND
+	      a.`Enabled` = 1";
     }
   }
 }
