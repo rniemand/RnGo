@@ -11,7 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RnGo.Core", "RnGo.Core\RnGo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RnGo.Core.T1.Tests", "RnGo.Core.T1.Tests\RnGo.Core.T1.Tests.csproj", "{807DE201-7C94-43E2-AF77-BA4E5C2F5DF7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevConsole", "DevConsole\DevConsole.csproj", "{8B6DDDAB-4E2A-4347-A5D3-B51D416906D1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevConsole", "DevConsole\DevConsole.csproj", "{8B6DDDAB-4E2A-4347-A5D3-B51D416906D1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{00A0F198-09A1-4F47-A188-E5DDC6D4AB96}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,7 +43,7 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{8EFFC6C9-F3C6-42E9-A122-21CE26BCDFFA} = {AC4C982A-5FF2-42BA-A737-BC48B4056347}
-		{807DE201-7C94-43E2-AF77-BA4E5C2F5DF7} = {AC4C982A-5FF2-42BA-A737-BC48B4056347}
+		{807DE201-7C94-43E2-AF77-BA4E5C2F5DF7} = {00A0F198-09A1-4F47-A188-E5DDC6D4AB96}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5DAFA654-C531-41CE-B8F8-727D5ADBFCB3}
