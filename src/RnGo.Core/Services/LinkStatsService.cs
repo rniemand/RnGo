@@ -2,33 +2,32 @@
 using RnGo.Core.Entities;
 using RnGo.Core.Repos;
 
-namespace RnGo.Core.Services
+namespace RnGo.Core.Services;
+
+public interface ILinkStatsService
 {
-  public interface ILinkStatsService
+  Task RecordLinkFollow(LinkEntity link);
+}
+
+public class LinkStatsService : ILinkStatsService
+{
+  private readonly ILogger<LinkStatsService> _logger;
+  private readonly ILinkRepo _linkRepo;
+
+  public LinkStatsService(
+    ILogger<LinkStatsService> logger,
+    ILinkRepo linkRepo)
   {
-    Task RecordLinkFollow(LinkEntity link);
+    // TODO: [LinkStatsService] (TESTS) Add tests
+    _logger = logger;
+    _linkRepo = linkRepo;
   }
 
-  public class LinkStatsService : ILinkStatsService
+
+  // Interface methods
+  public async Task RecordLinkFollow(LinkEntity link)
   {
-    private readonly ILogger<LinkStatsService> _logger;
-    private readonly ILinkRepo _linkRepo;
-
-    public LinkStatsService(
-      ILogger<LinkStatsService> logger,
-      ILinkRepo linkRepo)
-    {
-      // TODO: [LinkStatsService] (TESTS) Add tests
-      _logger = logger;
-      _linkRepo = linkRepo;
-    }
-
-
-    // Interface methods
-    public async Task RecordLinkFollow(LinkEntity link)
-    {
-      // TODO: [LinkStatsService.RecordLinkFollow] (TESTS) Add tests
-      await _linkRepo.UpdateFollowCount(link.LinkId);
-    }
+    // TODO: [LinkStatsService.RecordLinkFollow] (TESTS) Add tests
+    await _linkRepo.UpdateFollowCount(link.LinkId);
   }
 }

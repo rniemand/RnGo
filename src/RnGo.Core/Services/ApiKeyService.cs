@@ -3,99 +3,98 @@ using RnGo.Core.Configuration;
 using RnGo.Core.Providers;
 using RnGo.Core.Repos;
 
-namespace RnGo.Core.Services
+namespace RnGo.Core.Services;
+
+public interface IApiKeyService
 {
-  public interface IApiKeyService
+  Task<bool> IsValidApiKey(string apiKey);
+}
+
+public class ApiKeyService : IApiKeyService
+{
+  public List<string> ApiKeys { get; }
+  private readonly ILogger<ApiKeyService> _logger;
+  private readonly IApiKeyRepo _apiKeyRepo;
+  private readonly RnGoConfig _config;
+  private int _apiKeyCount;
+
+  public ApiKeyService(
+    ILogger<ApiKeyService> logger,
+    IRnGoConfigProvider configProvider,
+    IApiKeyRepo apiKeyRepo)
   {
-    Task<bool> IsValidApiKey(string apiKey);
+    _logger = logger;
+    _apiKeyRepo = apiKeyRepo;
+
+    _config = configProvider.Provide();
+    ApiKeys = new List<string>();
+    _apiKeyCount = 0;
+
+    RefreshApiKeys();
   }
 
-  public class ApiKeyService : IApiKeyService
+
+  // Public methods
+  public async Task<bool> IsValidApiKey(string apiKey)
   {
-    public List<string> ApiKeys { get; }
-    private readonly ILogger<ApiKeyService> _logger;
-    private readonly IApiKeyRepo _apiKeyRepo;
-    private readonly RnGoConfig _config;
-    private int _apiKeyCount;
+    // TODO: [ApiKeyService.IsValidApiKey] (TESTS) Add tests
+    await Task.CompletedTask;
+    if (_apiKeyCount == 0)
+      return false;
 
-    public ApiKeyService(
-      ILogger<ApiKeyService> logger,
-      IRnGoConfigProvider configProvider,
-      IApiKeyRepo apiKeyRepo)
+    var upperKey = apiKey.ToUpper();
+    var isValid = ApiKeys.Any(x => x.Equals(upperKey));
+
+    if (!isValid)
     {
-      _logger = logger;
-      _apiKeyRepo = apiKeyRepo;
-
-      _config = configProvider.Provide();
-      ApiKeys = new List<string>();
-      _apiKeyCount = 0;
-
-      RefreshApiKeys();
+      _logger.LogWarning("Invalid API provided: {apiKey}", apiKey);
+      return false;
     }
 
+    return true;
+  }
 
-    // Public methods
-    public async Task<bool> IsValidApiKey(string apiKey)
-    {
-      // TODO: [ApiKeyService.IsValidApiKey] (TESTS) Add tests
-      await Task.CompletedTask;
-      if (_apiKeyCount == 0)
-        return false;
+  public void RefreshApiKeys()
+  {
+    // TODO: [ApiKeyService.RefreshApiKeys] (TESTS) Add tests
+    // Will be extended out to revoke keys in the future
+    ApiKeys.Clear();
 
-      var upperKey = apiKey.ToUpper();
-      var isValid = ApiKeys.Any(x => x.Equals(upperKey));
+    LoadConfigApiKeys();
+    LoadDatabaseApiKeys();
 
-      if (!isValid)
-      {
-        _logger.LogWarning("Invalid API provided: {apiKey}", apiKey);
-        return false;
-      }
-
-      return true;
-    }
-
-    public void RefreshApiKeys()
-    {
-      // TODO: [ApiKeyService.RefreshApiKeys] (TESTS) Add tests
-      // Will be extended out to revoke keys in the future
-      ApiKeys.Clear();
-
-      LoadConfigApiKeys();
-      LoadDatabaseApiKeys();
-
-      _apiKeyCount = ApiKeys.Count;
-      _logger.LogInformation("Loaded {count} enabled API keys", _apiKeyCount);
-    }
+    _apiKeyCount = ApiKeys.Count;
+    _logger.LogInformation("Loaded {count} enabled API keys", _apiKeyCount);
+  }
 
 
-    // Internal methods
-    private void LoadConfigApiKeys()
-    {
-      // TODO: [ApiKeyService.LoadConfigApiKeys] (TESTS) Add tests
-      var apiKeys = _config.ApiKeys
-        .Select(x => x.ToUpper())
-        .ToList();
+  // Internal methods
+  private void LoadConfigApiKeys()
+  {
+    // TODO: [ApiKeyService.LoadConfigApiKeys] (TESTS) Add tests
+    var apiKeys = _config.ApiKeys
+      .Select(x => x.ToUpper())
+      .ToList();
 
-      if(apiKeys.Count == 0)
-        return;
+    if(apiKeys.Count == 0)
+      return;
 
-      _logger.LogDebug("Loaded {count} API keys from config", apiKeys.Count);
-      ApiKeys.AddRange(apiKeys);
-    }
+    _logger.LogDebug("Loaded {count} API keys from config", apiKeys.Count);
+    ApiKeys.AddRange(apiKeys);
+  }
 
-    private void LoadDatabaseApiKeys()
-    {
-      // TODO: [ApiKeyService.LoadDatabaseApiKeys] (TESTS) Add tests
-      var apiKeys = _apiKeyRepo
-        .GetEnabledApiKeys()
-        .GetAwaiter()
-        .GetResult();
+  private void LoadDatabaseApiKeys()
+  {
+    // TODO: [ApiKeyService.LoadDatabaseApiKeys] (TESTS) Add tests
+    var apiKeys = _apiKeyRepo
+      .GetEnabledApiKeys()
+      .GetAwaiter()
+      .GetResult();
 
-      if(apiKeys.Count == 0)
-        return;
+    if(apiKeys.Count == 0)
+      return;
       
-      _logger.LogDebug("Loaded {count} API keys from the DB", apiKeys.Count);
-      ApiKeys.AddRange(apiKeys.Select(x => x.ApiKey));
-    }
+    _logger.LogDebug("Loaded {count} API keys from the DB", apiKeys.Count);
+    ApiKeys.AddRange(apiKeys.Select(x => x.ApiKey));
   }
 }
