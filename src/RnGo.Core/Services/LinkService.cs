@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
-using RnGo.Core.Models;
+﻿using RnGo.Core.Models;
 using RnGo.Core.Models.Responses;
 
 namespace RnGo.Core.Services;
@@ -13,19 +12,16 @@ public interface ILinkService
 
 public class LinkService : ILinkService
 {
-  private readonly ILogger<LinkService> _logger;
   private readonly ILinkStorageService _linkStore;
   private readonly ILinkStatsService _statsService;
   private readonly IApiKeyService _apiKeyService;
 
   public LinkService(
-    ILogger<LinkService> logger,
     ILinkStorageService linkStore,
     ILinkStatsService statsService,
     IApiKeyService apiKeyService)
   {
     // TODO: [LinkService] (TESTS) Add tests
-    _logger = logger;
     _linkStore = linkStore;
     _statsService = statsService;
     _apiKeyService = apiKeyService;
