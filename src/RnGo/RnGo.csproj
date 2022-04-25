@@ -6,10 +6,15 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
 	  <ProjectGuid>1F8EBE02-2B40-4D76-B950-B9AC97491D34</ProjectGuid>
+	  <CodeAnalysisRuleSet>..\.sonarlint\rngocsharp.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
 
   <ItemGroup>
     <Content Remove="nlog.config" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="..\.sonarlint\rngo\CSharp\SonarLint.xml" Link="SonarLint.xml" />
   </ItemGroup>
 
   <ItemGroup>
