@@ -7,7 +7,6 @@ using Rn.NetCore.Common.Helpers;
 using Rn.NetCore.Common.Logging;
 using Rn.NetCore.DbCommon;
 using Rn.NetCore.DbCommon.Helpers;
-using Rn.NetCore.DbCommon.Interfaces;
 using Rn.NetCore.Metrics;
 using RnGo.Core.Entities;
 using RnGo.Core.Helpers;
@@ -37,7 +36,7 @@ namespace DevConsole
     {
       _services
         .GetRequiredService<ILoggerAdapter<RnGoDevelopment>>()
-        .Info("Hello World");
+        .LogInformation("Hello World");
 
       return this;
     }
