@@ -1,13 +1,12 @@
-﻿namespace RnGo.Core.Entities
-{
-  public class GenericCountEntity
-  {
-    public long CountLong { get; set; }
+﻿namespace RnGo.Core.Entities;
 
-    public GenericCountEntity()
-    {
-      // TODO: [GenericCountEntity] (TESTS) Add tests
-      CountLong = 0;
-    }
+public class GenericCountEntity
+{
+  public long CountLong { get; set; }
+
+  public GenericCountEntity()
+  {
+    // TODO: [GenericCountEntity] (TESTS) Add tests
+    CountLong = 0;
   }
 }
