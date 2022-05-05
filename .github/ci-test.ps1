@@ -1,5 +1,6 @@
-# MANUAL :: .\ci-test.ps1 -output (pwd)
-
+<#(Rn.BuildScriptHelper){
+	"version": "1.0.106"
+}#>
 param (
   [Parameter(Mandatory=$false)]
   [string] $rootDir = $PSScriptRoot,
