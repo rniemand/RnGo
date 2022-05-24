@@ -18,14 +18,9 @@ jobs:
         with:
           java-version: 1.11
 
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           fetch-depth: 0
-
-      - uses: actions/setup-dotnet@v2
-        name: Install .net 6.x
-        with:
-          dotnet-version: 6.0.x
 
       - name: Cache SonarQube packages
         uses: actions/cache@v1
