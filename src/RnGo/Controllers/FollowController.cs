@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using RnGo.Core.Services;
 
 namespace RnGo.Controllers;
@@ -17,7 +17,6 @@ public class FollowController : ControllerBase
   [HttpGet, Route("{shortCode}")]
   public async Task<ActionResult> Get(string shortCode)
   {
-    // TODO: [FollowController.Get] (TESTS) Add tests
     var resolvedUrl = await _linkService.Resolve(shortCode);
 
     if (string.IsNullOrWhiteSpace(resolvedUrl))

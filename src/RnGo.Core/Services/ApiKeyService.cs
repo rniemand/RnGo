@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging;
 using RnGo.Core.Configuration;
 using RnGo.Core.Providers;
 using RnGo.Core.Repos;
@@ -37,7 +37,6 @@ public class ApiKeyService : IApiKeyService
   // Public methods
   public async Task<bool> IsValidApiKey(string apiKey)
   {
-    // TODO: [ApiKeyService.IsValidApiKey] (TESTS) Add tests
     await Task.CompletedTask;
     if (_apiKeyCount == 0)
       return false;
@@ -56,7 +55,6 @@ public class ApiKeyService : IApiKeyService
 
   public void RefreshApiKeys()
   {
-    // TODO: [ApiKeyService.RefreshApiKeys] (TESTS) Add tests
     // Will be extended out to revoke keys in the future
     ApiKeys.Clear();
 
@@ -71,7 +69,6 @@ public class ApiKeyService : IApiKeyService
   // Internal methods
   private void LoadConfigApiKeys()
   {
-    // TODO: [ApiKeyService.LoadConfigApiKeys] (TESTS) Add tests
     var apiKeys = _config.ApiKeys
       .Select(x => x.ToUpper())
       .ToList();
@@ -85,7 +82,6 @@ public class ApiKeyService : IApiKeyService
 
   private void LoadDatabaseApiKeys()
   {
-    // TODO: [ApiKeyService.LoadDatabaseApiKeys] (TESTS) Add tests
     var apiKeys = _apiKeyRepo
       .GetEnabledApiKeys()
       .GetAwaiter()

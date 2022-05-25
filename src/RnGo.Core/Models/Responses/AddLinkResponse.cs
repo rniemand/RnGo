@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Serialization;
+using System.Text.Json.Serialization;
 using Newtonsoft.Json;
 
 namespace RnGo.Core.Models.Responses;
@@ -9,22 +9,13 @@ public class AddLinkResponse
   public bool Success { get; set; }
 
   [JsonProperty("messages"), JsonPropertyName("messages")]
-  public string[] Messages { get; set; }
+  public string[] Messages { get; set; } = Array.Empty<string>();
 
   [JsonProperty("shortCode"), JsonPropertyName("shortCode")]
-  public string ShortCode { get; set; }
-
-  public AddLinkResponse()
-  {
-    // TODO: [AddLinkResponse] (TESTS) Add tests
-    Success = false;
-    Messages = Array.Empty<string>();
-    ShortCode = string.Empty;
-  }
+  public string ShortCode { get; set; } = string.Empty;
 
   public AddLinkResponse WithFailure(string message)
   {
-    // TODO: [AddLinkResponse] (TESTS) Add tests
     Success = false;
     Messages = new[] {message};
     return this;
@@ -32,7 +23,6 @@ public class AddLinkResponse
 
   public AddLinkResponse WithSuccess(string shortCode)
   {
-    // TODO: [AddLinkResponse] (TESTS) Add tests
     Success = true;
     ShortCode = shortCode;
 

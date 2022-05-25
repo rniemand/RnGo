@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging;
 using RnGo.Core.Entities;
 using RnGo.Core.Helpers;
 using RnGo.Core.Models.Dto;
@@ -26,7 +26,6 @@ public class LinkStorageService : ILinkStorageService
     IStringHelper stringHelper,
     ILinkRepo linkRepo)
   {
-    // TODO: [LinkStorageService] (TESTS) Add tests
     _logger = logger;
     _stringHelper = stringHelper;
     _linkRepo = linkRepo;
@@ -39,7 +38,6 @@ public class LinkStorageService : ILinkStorageService
   // Interface methods
   public async Task<RnGoLinkDto?> GetByUrl(string url)
   {
-    // TODO: [LinkStorageService.GetByUrl] (TESTS) Add tests
     if (string.IsNullOrWhiteSpace(url))
       return null;
 
@@ -50,7 +48,6 @@ public class LinkStorageService : ILinkStorageService
 
   public async Task<string> StoreLink(string url)
   {
-    // TODO: [LinkStorageService.StoreLink] (TESTS) Add tests
     var linkId = _nextLinkId++;
     var shortCode = _stringHelper.GenerateLinkString(linkId);
     var linkEntity = new LinkEntity(url, shortCode);
@@ -75,13 +72,11 @@ public class LinkStorageService : ILinkStorageService
 
   public async Task<LinkEntity?> GetByShortCode(string shortCode)
   {
-    // TODO: [LinkStorageService.GetByShortCode] (TESTS) Add tests
     return await _linkRepo.GetByShortCode(shortCode);
   }
 
   public async Task<long> GetLinkCount()
   {
-    // TODO: [LinkStorageService.GetLinkCount] (TESTS) Add tests
     var countEntity = await _linkRepo.GetMaxLinkId();
 
     return countEntity?.CountLong ?? 0;
@@ -91,7 +86,6 @@ public class LinkStorageService : ILinkStorageService
   // Internal methods
   private long GetNextLinkId()
   {
-    // TODO: [LinkStorageService.GetNextLinkId] (TESTS) Add tests
     var countEntity = _linkRepo.GetMaxLinkId().GetAwaiter().GetResult();
     if (countEntity is null)
       return 1;

@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging;
 using RnGo.Core.Entities;
 using RnGo.Core.Repos;
 
@@ -18,16 +18,12 @@ public class LinkStatsService : ILinkStatsService
     ILogger<LinkStatsService> logger,
     ILinkRepo linkRepo)
   {
-    // TODO: [LinkStatsService] (TESTS) Add tests
     _logger = logger;
     _linkRepo = linkRepo;
   }
 
 
   // Interface methods
-  public async Task RecordLinkFollow(LinkEntity link)
-  {
-    // TODO: [LinkStatsService.RecordLinkFollow] (TESTS) Add tests
+  public async Task RecordLinkFollow(LinkEntity link) =>
     await _linkRepo.UpdateFollowCount(link.LinkId);
-  }
 }

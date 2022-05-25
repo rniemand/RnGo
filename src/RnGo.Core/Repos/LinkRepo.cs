@@ -1,4 +1,4 @@
-﻿using Rn.NetCore.DbCommon;
+using Rn.NetCore.DbCommon;
 using RnGo.Core.Entities;
 using RnGo.Core.RepoQueries;
 
@@ -21,14 +21,12 @@ public class LinkRepo : BaseRepo<LinkRepo>, ILinkRepo
   public LinkRepo(IServiceProvider serviceProvider, ILinkRepoQueries queries)
     : base(serviceProvider)
   {
-    // TODO: [LinkRepo] (TESTS) Add tests
     _queries = queries;
   }
 
   // Interface methods
   public async Task<int> AddLink(LinkEntity entity)
   {
-    // TODO: [LinkRepo.AddLink] (TESTS) Add tests
     return await ExecuteAsync(
       nameof(AddLink),
       _queries.AddLink(),
@@ -38,7 +36,6 @@ public class LinkRepo : BaseRepo<LinkRepo>, ILinkRepo
 
   public async Task<LinkEntity?> GetByUrl(string url)
   {
-    // TODO: [LinkRepo.GetByUrl] (TESTS) Add tests
     return await GetSingle<LinkEntity>(
       nameof(GetByUrl),
       _queries.GetByUrl(),
@@ -48,7 +45,6 @@ public class LinkRepo : BaseRepo<LinkRepo>, ILinkRepo
 
   public async Task<GenericCountEntity?> GetMaxLinkId()
   {
-    // TODO: [LinkRepo.GetMaxLinkId] (TESTS) Add tests
     return await GetSingle<GenericCountEntity>(
       nameof(GetMaxLinkId),
       _queries.GetMaxLinkId()
@@ -57,7 +53,6 @@ public class LinkRepo : BaseRepo<LinkRepo>, ILinkRepo
 
   public async Task<LinkEntity?> GetById(long linkId)
   {
-    // TODO: [LinkRepo.GetById] (TESTS) Add tests
     return await GetSingle<LinkEntity>(
       nameof(GetById),
       _queries.GetById(),
@@ -67,7 +62,6 @@ public class LinkRepo : BaseRepo<LinkRepo>, ILinkRepo
 
   public async Task<LinkEntity?> GetByShortCode(string shortCode)
   {
-    // TODO: [LinkRepo.GetByShortCode] (TESTS) Add tests
     return await GetSingle<LinkEntity>(
       nameof(GetByShortCode),
       _queries.GetByShortCode(),
@@ -77,7 +71,6 @@ public class LinkRepo : BaseRepo<LinkRepo>, ILinkRepo
 
   public async Task<int> UpdateFollowCount(long linkId)
   {
-    // TODO: [LinkRepo.UpdateFollowCount] (TESTS) Add tests
     return await ExecuteAsync(
       nameof(UpdateFollowCount),
       _queries.UpdateFollowCount(),

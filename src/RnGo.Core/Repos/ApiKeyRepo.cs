@@ -1,4 +1,4 @@
-﻿using Rn.NetCore.DbCommon;
+using Rn.NetCore.DbCommon;
 using RnGo.Core.Entities;
 using RnGo.Core.RepoQueries;
 
@@ -18,14 +18,12 @@ public class ApiKeyRepo : BaseRepo<ApiKeyRepo>, IApiKeyRepo
   public ApiKeyRepo(IServiceProvider serviceProvider, IApiKeyRepoQueries queries)
     : base(serviceProvider)
   {
-    // TODO: [ApiKeyRepo] (TESTS) Add tests
     _queries = queries;
 
   }
 
   public async Task<int> Add(string apiKey)
   {
-    // TODO: [ApiKeyRepo.Add] (TESTS) Add tests
     return await ExecuteAsync(
       nameof(Add),
       _queries.Add(),
@@ -35,7 +33,6 @@ public class ApiKeyRepo : BaseRepo<ApiKeyRepo>, IApiKeyRepo
 
   public async Task<ApiKeyEntity?> GetByApiKey(string apiKey)
   {
-    // TODO: [ApiKeyRepo.GetByApiKey] (TESTS) Add tests
     return await GetSingle<ApiKeyEntity>(
       nameof(GetByApiKey),
       _queries.GetByApiKey(),
@@ -45,7 +42,6 @@ public class ApiKeyRepo : BaseRepo<ApiKeyRepo>, IApiKeyRepo
 
   public async Task<List<ApiKeyEntity>> GetEnabledApiKeys()
   {
-    // TODO: [ApiKeyRepo.GetEnabledApiKeys] (TESTS) Add tests
     return await GetList<ApiKeyEntity>(
       nameof(GetEnabledApiKeys),
       _queries.GetEnabledApiKeys()

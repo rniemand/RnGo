@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Rn.NetCore.Common.Abstractions;
 using RnGo.Core.Configuration;
@@ -24,7 +24,6 @@ public class RnGoConfigProvider : IRnGoConfigProvider
     IEnvironmentAbstraction environment,
     IPathAbstraction path)
   {
-    // TODO: [RnGoConfigProvider] (TESTS) Add tests
     _logger = logger;
     _configuration = configuration;
     _environment = environment;
@@ -33,7 +32,6 @@ public class RnGoConfigProvider : IRnGoConfigProvider
 
   public RnGoConfig Provide()
   {
-    // TODO: [RnGoConfigProvider.Provide] (TESTS) Add tests
     if (_config is null)
     {
       _config = new RnGoConfig();
@@ -51,7 +49,6 @@ public class RnGoConfigProvider : IRnGoConfigProvider
   // Internal methods
   private string GenerateRootDir(string configRoot)
   {
-    // TODO: [RnGoConfigProvider.GenerateRootDir] (TESTS) Add tests
     if (string.IsNullOrWhiteSpace(configRoot) || configRoot == "./")
       configRoot = _environment.CurrentDirectory;
 

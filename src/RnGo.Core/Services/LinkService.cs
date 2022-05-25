@@ -1,4 +1,4 @@
-﻿using RnGo.Core.Models;
+using RnGo.Core.Models;
 using RnGo.Core.Models.Responses;
 
 namespace RnGo.Core.Services;
@@ -21,7 +21,6 @@ public class LinkService : ILinkService
     ILinkStatsService statsService,
     IApiKeyService apiKeyService)
   {
-    // TODO: [LinkService] (TESTS) Add tests
     _linkStore = linkStore;
     _statsService = statsService;
     _apiKeyService = apiKeyService;
@@ -29,7 +28,6 @@ public class LinkService : ILinkService
 
   public async Task<string> Resolve(string shortCode)
   {
-    // TODO: [LinkService.Resolve] (TESTS) Add tests
     var link = await _linkStore.GetByShortCode(shortCode);
 
     if (link is null)
@@ -42,7 +40,6 @@ public class LinkService : ILinkService
 
   public async Task<AddLinkResponse> AddLink(AddLinkRequest request)
   {
-    // TODO: [LinkService.StoreLink] (TESTS) Add tests
     var response = new AddLinkResponse();
 
     // Ensure that this is a valid URL
@@ -65,17 +62,10 @@ public class LinkService : ILinkService
       : response.WithSuccess(addedLink);
   }
 
-  public async Task<long> GetLinkCount()
-  {
-    // TODO: [LinkService.GetLinkCount] (TESTS) Add tests
-    return await _linkStore.GetLinkCount();
-  }
+  public async Task<long> GetLinkCount() =>
+    await _linkStore.GetLinkCount();
 
   // Internal
-  private static bool IsValidLink(string link)
-  {
-    // TODO: [LinkService.IsValidLink] (TESTS) Add tests
-    // TODO: [LinkService.IsValidLink] (EXPAND) Add better validation logic here
-    return !string.IsNullOrWhiteSpace(link);
-  }
+  private static bool IsValidLink(string link) =>
+    !string.IsNullOrWhiteSpace(link);
 }

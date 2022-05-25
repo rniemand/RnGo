@@ -1,20 +1,10 @@
-﻿namespace RnGo.Core.Entities;
+namespace RnGo.Core.Entities;
 
 public class ApiKeyEntity
 {
   public int ApiKeyId { get; set; }
-  public DateTime DateAddedUtc { get; set; }
+  public DateTime DateAddedUtc { get; set; } = DateTime.UtcNow;
   public bool Deleted { get; set; }
-  public bool Enabled { get; set; }
-  public string ApiKey { get; set; }
-
-  public ApiKeyEntity()
-  {
-    // TODO: [ApiKeyEntity] (TESTS) Add tests
-    ApiKeyId = 0;
-    DateAddedUtc = DateTime.UtcNow;
-    Deleted = false;
-    Enabled = true;
-    ApiKey = string.Empty;
-  }
+  public bool Enabled { get; set; } = true;
+  public string ApiKey { get; set; } = string.Empty;
 }
