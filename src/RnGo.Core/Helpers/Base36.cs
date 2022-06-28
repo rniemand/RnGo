@@ -1,5 +1,8 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace RnGo.Core.Helpers;
 
+[ExcludeFromCodeCoverage]
 public struct Base36
 {
   // https://www.codeproject.com/Articles/10619/Base-36-type-for-NET-C

@@ -19,17 +19,16 @@ public class ApiKeyRepo : BaseRepo<ApiKeyRepo>, IApiKeyRepo
     : base(baseRepoHelper)
   {
     _queries = queries;
-
   }
 
   public async Task<int> AddAsync(string apiKey) =>
-    await ExecuteAsync(nameof(AddAsync), _queries.Add(), new
+    await ExecuteAsync(nameof(AddAsync), _queries.Add(), new ApiKeyEntity
     {
       ApiKey = apiKey
     });
 
   public async Task<ApiKeyEntity?> GetAsync(string apiKey) =>
-    await GetSingle<ApiKeyEntity>(nameof(GetAsync), _queries.Get(), new
+    await GetSingle<ApiKeyEntity>(nameof(GetAsync), _queries.Get(), new ApiKeyEntity
     {
       ApiKey = apiKey
     });
