@@ -1,135 +1,93 @@
 using Microsoft.Extensions.DependencyInjection;
-using Rn.NetCore.Common.Helpers;
-using Rn.NetCore.Common.Logging;
 using RnGo.Core.Entities;
 using RnGo.Core.Helpers;
 using RnGo.Core.Models;
+using RnGo.Core.Models.Responses;
 using RnGo.Core.Repos;
 using RnGo.Core.Services;
 
 namespace DevConsole;
 
-public class RnGoDevelopment
+public static class RnGoDevelopment
 {
-  public RnGoDevelopment DoNothing()
+  public static async Task<string> ResolveLink(string shortCode)
   {
-    return this;
-  }
-
-  public RnGoDevelopment HelloWorld()
-  {
-    DIContainer.Services
-      .GetRequiredService<ILoggerAdapter<RnGoDevelopment>>()
-      .LogInformation("Hello World");
-
-    return this;
-  }
-
-  public RnGoDevelopment ResolveLink()
-  {
-    DIContainer.Services
+    return await DIContainer.Services
       .GetRequiredService<ILinkService>()
-      .Resolve("a");
-
-    return this;
+      .Resolve(shortCode);
   }
 
-  public RnGoDevelopment Base64Encode()
+  public static string Base64Encode(string input)
   {
     var helper = DIContainer.Services.GetRequiredService<IStringHelper>();
-    var encoded = helper.Base64Encode("hello");
+    var encoded = helper.Base64Encode(input);
     Console.WriteLine("Encoded: " + encoded);
     var decoded = helper.Base64Decode(encoded);
     Console.WriteLine("Decoded: " + decoded);
-    return this;
+    return encoded;
   }
 
-  public RnGoDevelopment GenerateLinkString(long input)
+  public static string GenerateLinkString(long input)
   {
     var linkString = DIContainer.Services
       .GetRequiredService<IStringHelper>()
       .GenerateLinkString(input);
 
     Console.WriteLine($"Generated '{linkString}' from '{input}'");
-    return this;
+    return linkString;
   }
 
-  public RnGoDevelopment AddLink(string url, string? apiKey = null)
+  public static async Task<AddLinkResponse> AddLink(string url, string? apiKey = null)
   {
     var linkService = DIContainer.Services.GetRequiredService<ILinkService>();
 
-    var response = linkService
+    var response = await linkService
       .AddLink(new AddLinkRequest
       {
         Url = url,
         ApiKey = apiKey ?? "18A8B66F-B4F1-4814-8771-D1EABD9CFB43"
-      })
-      .GetAwaiter()
-      .GetResult();
+      });
 
     Console.WriteLine($"Stored as '{response.ShortCode}'");
 
-    return this;
+    return response;
   }
-
-  public RnGoDevelopment ResolveLink(string shortCode)
+  
+  public static async Task AddDatabaseLink()
   {
-    var services = DIContainer.Services;
-    var jsonHelper = services.GetRequiredService<IJsonHelper>();
-
-    var resolvedLink = services
-      .GetRequiredService<ILinkService>()
-      .Resolve(shortCode)
-      .GetAwaiter()
-      .GetResult();
-
-    Console.WriteLine($"Resolved as: {jsonHelper.SerializeObject(resolvedLink)}");
-
-    return this;
-  }
-
-  public RnGoDevelopment AddDatabaseLink()
-  {
-    var repo = DIContainer.Services.GetRequiredService<ILinkRepo>();
-
-    repo
+    await DIContainer.Services
+      .GetRequiredService<ILinkRepo>()
       .AddLink(new LinkEntity
       {
         Url = "https://docs.google.com/spreadsheets",
         ShortCode = "2"
-      })
-      .GetAwaiter()
-      .GetResult();
-
-
-    return this;
+      });
   }
 
-  public RnGoDevelopment GetLinkCount()
+  public static async Task<long> GetLinkCount()
   {
-    var urlCount = DIContainer.Services
+    var urlCount = await DIContainer.Services
       .GetRequiredService<ILinkService>()
-      .GetLinkCount()
-      .GetAwaiter()
-      .GetResult();
+      .GetLinkCount();
 
     Console.WriteLine("URL Count: {0}", urlCount);
 
-    return this;
+    return urlCount;
   }
 
-  public RnGoDevelopment StoreApiKey(string apiKey)
+  public static async Task<ApiKeyEntity> StoreApiKey(string apiKey)
   {
     var apiKeyRepo = DIContainer.Services.GetRequiredService<IApiKeyRepo>();
-    var apiKeyEntity = apiKeyRepo.GetByApiKey(apiKey).GetAwaiter().GetResult();
+    var apiKeyEntity = await apiKeyRepo.GetByApiKey(apiKey);
+
     if (apiKeyEntity is null)
     {
-      apiKeyRepo.Add(apiKey).GetAwaiter().GetResult();
-      apiKeyEntity = apiKeyRepo.GetByApiKey(apiKey).GetAwaiter().GetResult();
+      await apiKeyRepo.Add(apiKey);
+      apiKeyEntity = await apiKeyRepo.GetByApiKey(apiKey);
     }
 
-    Console.WriteLine(apiKeyEntity.ApiKey);
+    Console.WriteLine(apiKeyEntity!.ApiKey);
 
-    return this;
+    return apiKeyEntity;
   }
 }
