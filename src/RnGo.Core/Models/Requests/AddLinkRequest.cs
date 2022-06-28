@@ -1,13 +1,12 @@
-using System.Text.Json.Serialization;
 using Newtonsoft.Json;
 
 namespace RnGo.Core.Models;
 
 public class AddLinkRequest
 {
-  [JsonProperty("apiKey"), JsonPropertyName("apiKey")]
+  [JsonProperty("apiKey")]
   public string ApiKey { get; set; } = string.Empty;
 
-  [JsonProperty("url"), JsonPropertyName("url")]
+  [JsonProperty("url")]
   public string Url { get; set; } = string.Empty;
 }

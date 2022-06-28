@@ -3,8 +3,8 @@
 public interface IApiKeyRepoQueries
 {
   string Add();
-  string GetByApiKey();
-  string GetEnabledApiKeys();
+  string Get();
+  string GetEnabled();
 }
 
 public class ApiKeyRepoQueries : IApiKeyRepoQueries
@@ -17,7 +17,7 @@ public class ApiKeyRepoQueries : IApiKeyRepoQueries
 	      (@ApiKey)";
   }
 
-  public string GetByApiKey()
+  public string Get()
   {
     return @"SELECT *
       FROM `ApiKeys` a
@@ -26,7 +26,7 @@ public class ApiKeyRepoQueries : IApiKeyRepoQueries
 	      a.`ApiKey` = @ApiKey";
   }
 
-  public string GetEnabledApiKeys()
+  public string GetEnabled()
   {
     return @"SELECT *
       FROM `ApiKeys` a

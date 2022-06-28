@@ -2,7 +2,7 @@
 
 public interface ILinkRepoQueries
 {
-  string AddLink();
+  string Add();
   string GetByUrl();
   string GetMaxLinkId();
   string GetById();
@@ -12,7 +12,7 @@ public interface ILinkRepoQueries
   
 public class LinkRepoQueries : ILinkRepoQueries
 {
-  public string AddLink()
+  public string Add()
   {
     return @"INSERT INTO `Links`
 	      (`ShortCode`, `Url`)

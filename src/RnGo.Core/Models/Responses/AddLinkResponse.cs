@@ -1,17 +1,16 @@
-using System.Text.Json.Serialization;
 using Newtonsoft.Json;
 
 namespace RnGo.Core.Models.Responses;
 
 public class AddLinkResponse
 {
-  [JsonProperty("success"), JsonPropertyName("success")]
+  [JsonProperty("success")]
   public bool Success { get; set; }
 
-  [JsonProperty("messages"), JsonPropertyName("messages")]
+  [JsonProperty("messages")]
   public string[] Messages { get; set; } = Array.Empty<string>();
 
-  [JsonProperty("shortCode"), JsonPropertyName("shortCode")]
+  [JsonProperty("shortCode")]
   public string ShortCode { get; set; } = string.Empty;
 
   public AddLinkResponse WithFailure(string message)
@@ -25,7 +24,6 @@ public class AddLinkResponse
   {
     Success = true;
     ShortCode = shortCode;
-
     return this;
   }
 }

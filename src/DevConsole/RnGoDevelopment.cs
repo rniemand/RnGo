@@ -1,208 +1,93 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using NLog.Extensions.Logging;
-using Rn.NetCore.Common.Abstractions;
-using Rn.NetCore.Common.Helpers;
-using Rn.NetCore.Common.Logging;
-using Rn.NetCore.DbCommon;
-using Rn.NetCore.DbCommon.Helpers;
-using Rn.NetCore.Metrics;
+﻿using Microsoft.Extensions.DependencyInjection;
 using RnGo.Core.Entities;
 using RnGo.Core.Helpers;
 using RnGo.Core.Models;
-using RnGo.Core.Providers;
-using RnGo.Core.RepoQueries;
+using RnGo.Core.Models.Responses;
 using RnGo.Core.Repos;
 using RnGo.Core.Services;
 
 namespace DevConsole;
 
-public class RnGoDevelopment
+public static class RnGoDevelopment
 {
-  private readonly IServiceProvider _services;
-
-  public RnGoDevelopment()
+  public static async Task<string> ResolveLink(string shortCode)
   {
-    _services = BuildServiceContainer();
-  }
-
-  public RnGoDevelopment DoNothing()
-  {
-    return this;
-  }
-
-  public RnGoDevelopment HelloWorld()
-  {
-    _services
-      .GetRequiredService<ILoggerAdapter<RnGoDevelopment>>()
-      .LogInformation("Hello World");
-
-    return this;
-  }
-
-  public RnGoDevelopment ResolveLink()
-  {
-    _services
+    return await DIContainer.Services
       .GetRequiredService<ILinkService>()
-      .Resolve("a");
-
-    return this;
+      .Resolve(shortCode);
   }
 
-  public RnGoDevelopment Base64Encode()
+  public static string Base64Encode(string input)
   {
-    var helper = _services.GetRequiredService<IStringHelper>();
-    var encoded = helper.Base64Encode("hello");
+    var helper = DIContainer.Services.GetRequiredService<IStringHelper>();
+    var encoded = helper.Base64Encode(input);
     Console.WriteLine("Encoded: " + encoded);
     var decoded = helper.Base64Decode(encoded);
     Console.WriteLine("Decoded: " + decoded);
-    return this;
+    return encoded;
   }
 
-  public RnGoDevelopment GenerateLinkString(long input)
+  public static string GenerateLinkString(long input)
   {
-    var linkString = _services
+    var linkString = DIContainer.Services
       .GetRequiredService<IStringHelper>()
       .GenerateLinkString(input);
 
     Console.WriteLine($"Generated '{linkString}' from '{input}'");
-    return this;
+    return linkString;
   }
 
-  public RnGoDevelopment AddLink(string url, string? apiKey = null)
+  public static async Task<AddLinkResponse> AddLink(string url, string? apiKey = null)
   {
-    var linkService = _services.GetRequiredService<ILinkService>();
+    var linkService = DIContainer.Services.GetRequiredService<ILinkService>();
 
-    var response = linkService
+    var response = await linkService
       .AddLink(new AddLinkRequest
       {
         Url = url,
         ApiKey = apiKey ?? "18A8B66F-B4F1-4814-8771-D1EABD9CFB43"
-      })
-      .GetAwaiter()
-      .GetResult();
+      });
 
     Console.WriteLine($"Stored as '{response.ShortCode}'");
 
-    return this;
+    return response;
   }
-
-  public RnGoDevelopment ResolveLink(string shortCode)
+  
+  public static async Task AddDatabaseLink()
   {
-    var jsonHelper = _services.GetRequiredService<IJsonHelper>();
-
-    var resolvedLink = _services
-      .GetRequiredService<ILinkService>()
-      .Resolve(shortCode)
-      .GetAwaiter()
-      .GetResult();
-
-    Console.WriteLine($"Resolved as: {jsonHelper.SerializeObject(resolvedLink)}");
-
-    return this;
-  }
-
-  public RnGoDevelopment AddDatabaseLink()
-  {
-    var repo = _services.GetRequiredService<ILinkRepo>();
-
-    repo
-      .AddLink(new LinkEntity
+    await DIContainer.Services
+      .GetRequiredService<ILinkRepo>()
+      .AddAsync(new LinkEntity
       {
         Url = "https://docs.google.com/spreadsheets",
         ShortCode = "2"
-      })
-      .GetAwaiter()
-      .GetResult();
-
-
-    return this;
+      });
   }
 
-  public RnGoDevelopment GetLinkCount()
+  public static async Task<long> GetLinkCount()
   {
-    var urlCount = _services
+    var urlCount = await DIContainer.Services
       .GetRequiredService<ILinkService>()
-      .GetLinkCount()
-      .GetAwaiter()
-      .GetResult();
+      .GetLinkCount();
 
     Console.WriteLine("URL Count: {0}", urlCount);
 
-    return this;
+    return urlCount;
   }
 
-  public RnGoDevelopment StoreApiKey(string apiKey)
+  public static async Task<ApiKeyEntity> StoreApiKey(string apiKey)
   {
-    var apiKeyRepo = _services.GetRequiredService<IApiKeyRepo>();
-    var apiKeyEntity = apiKeyRepo.GetByApiKey(apiKey).GetAwaiter().GetResult();
+    var apiKeyRepo = DIContainer.Services.GetRequiredService<IApiKeyRepo>();
+    var apiKeyEntity = await apiKeyRepo.GetAsync(apiKey);
+
     if (apiKeyEntity is null)
     {
-      apiKeyRepo.Add(apiKey).GetAwaiter().GetResult();
-      apiKeyEntity = apiKeyRepo.GetByApiKey(apiKey).GetAwaiter().GetResult();
+      await apiKeyRepo.AddAsync(apiKey);
+      apiKeyEntity = await apiKeyRepo.GetAsync(apiKey);
     }
 
-    Console.WriteLine(apiKeyEntity.ApiKey);
+    Console.WriteLine(apiKeyEntity!.ApiKey);
 
-    return this;
-  }
-
-  private static IServiceProvider BuildServiceContainer()
-  {
-    var services = new ServiceCollection();
-
-    var config = new ConfigurationBuilder()
-      .SetBasePath(Directory.GetCurrentDirectory())
-      .AddJsonFile("appsettings.json", true, true)
-      .Build();
-
-    services
-      // Configuration
-      .AddSingleton<IConfiguration>(config)
-
-      // Logging
-      .AddSingleton(typeof(ILoggerAdapter<>), typeof(LoggerAdapter<>))
-      .AddLogging(loggingBuilder =>
-      {
-        // configure Logging with NLog
-        loggingBuilder.ClearProviders();
-        loggingBuilder.SetMinimumLevel(LogLevel.Trace);
-        loggingBuilder.AddNLog(config);
-      })
-
-      // Services
-      .AddSingleton<ILinkService, LinkService>()
-      .AddSingleton<ILinkStorageService, LinkStorageService>()
-      .AddSingleton<ILinkStatsService, LinkStatsService>()
-      .AddSingleton<IApiKeyService, ApiKeyService>()
-
-      // Helpers
-      .AddSingleton<IStringHelper, StringHelper>()
-      .AddSingleton<IJsonHelper, JsonHelper>()
-
-      // Abstractions
-      .AddSingleton<IFileAbstraction, FileAbstraction>()
-      .AddSingleton<IDirectoryAbstraction, DirectoryAbstraction>()
-      .AddSingleton<IEnvironmentAbstraction, EnvironmentAbstraction>()
-      .AddSingleton<IPathAbstraction, PathAbstraction>()
-      .AddSingleton<IDateTimeAbstraction, DateTimeAbstraction>()
-
-      // Metrics
-      .AddSingleton<IMetricServiceUtils, MetricServiceUtils>()
-      .AddSingleton<IMetricService, MetricService>()
-
-      // Providers
-      .AddSingleton<IRnGoConfigProvider, RnGoConfigProvider>()
-
-      // Database
-      .AddSingleton<IConnectionResolver>(new ConnectionResolver(config, "RnGo"))
-      .AddSingleton<IDbConnectionHelper, MySqlConnectionHelper>()
-      .AddSingleton<ILinkRepo, LinkRepo>()
-      .AddSingleton<IApiKeyRepo, ApiKeyRepo>()
-      .AddSingleton<ILinkRepoQueries, LinkRepoQueries>()
-      .AddSingleton<IApiKeyRepoQueries, ApiKeyRepoQueries>();
-
-    return services.BuildServiceProvider();
+    return apiKeyEntity;
   }
 }

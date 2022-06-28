@@ -1,5 +1,9 @@
+using Rn.NetCore.Common.Logging;
+using RnGo.Core.Entities;
+using RnGo.Core.Helpers;
 using RnGo.Core.Models;
 using RnGo.Core.Models.Responses;
+using RnGo.Core.Repos;
 
 namespace RnGo.Core.Services;
 
@@ -12,28 +16,34 @@ public interface ILinkService
 
 public class LinkService : ILinkService
 {
-  private readonly ILinkStorageService _linkStore;
-  private readonly ILinkStatsService _statsService;
+  private readonly ILoggerAdapter<LinkService> _logger;
   private readonly IApiKeyService _apiKeyService;
+  private readonly ILinkRepo _linkRepo;
+  private readonly IStringHelper _stringHelper;
+  private long _nextLinkId;
 
   public LinkService(
-    ILinkStorageService linkStore,
-    ILinkStatsService statsService,
-    IApiKeyService apiKeyService)
+    ILoggerAdapter<LinkService> logger,
+    IApiKeyService apiKeyService,
+    ILinkRepo linkRepo,
+    IStringHelper stringHelper)
   {
-    _linkStore = linkStore;
-    _statsService = statsService;
+    _logger = logger;
     _apiKeyService = apiKeyService;
+    _linkRepo = linkRepo;
+    _stringHelper = stringHelper;
+
+    _nextLinkId = GetNextLinkId();
   }
 
   public async Task<string> Resolve(string shortCode)
   {
-    var link = await _linkStore.GetByShortCode(shortCode);
+    var link = await _linkRepo.GetByShortCodeAsync(shortCode);
 
     if (link is null)
       return string.Empty;
 
-    await _statsService.RecordLinkFollow(link);
+    await _linkRepo.UpdateFollowCountAsync(link.LinkId);
 
     return link.Url;
   }
@@ -51,21 +61,52 @@ public class LinkService : ILinkService
       return response.WithFailure("Invalid API key");
 
     // Check for an already existing link first
-    var existingLink = await _linkStore.GetByUrl(request.Url);
+    var existingLink = await _linkRepo.GetByUrlAsync(request.Url);
     if (existingLink is not null)
       return response.WithSuccess(existingLink.ShortCode);
 
     // This is a new link, add it
-    var addedLink = await _linkStore.StoreLink(request.Url);
-    return string.IsNullOrWhiteSpace(addedLink) 
-      ? response.WithFailure("Failed to add link") 
-      : response.WithSuccess(addedLink);
+    var linkId = _nextLinkId++;
+    var shortCode = _stringHelper.GenerateLinkString(linkId);
+    var linkEntity = new LinkEntity(request.Url, shortCode);
+
+    var rowCount = await _linkRepo.AddAsync(linkEntity);
+    if (rowCount <= 0)
+    {
+      _logger.LogError("Failed to store link: {url}", request.Url);
+      return response.WithFailure("Failed to add link");
+    }
+
+    var dbLink = await _linkRepo.GetByIdAsync(linkId);
+    if (dbLink is not null)
+      return response.WithSuccess(dbLink.ShortCode);
+
+    // Failed to store the DB link
+    _logger.LogError("Failed to store link: {url}", request.Url);
+    return response.WithFailure("Failed to add link");
   }
 
-  public async Task<long> GetLinkCount() =>
-    await _linkStore.GetLinkCount();
+  public async Task<long> GetLinkCount()
+  {
+    var countEntity = await _linkRepo.GetMaxLinkIdAsync();
+    return countEntity?.CountLong ?? 0;
+  }
 
-  // Internal
+
+  // Internal methods
   private static bool IsValidLink(string link) =>
     !string.IsNullOrWhiteSpace(link);
+
+  private long GetNextLinkId()
+  {
+    var countEntity = _linkRepo.GetMaxLinkIdAsync().GetAwaiter().GetResult();
+    if (countEntity is null)
+      return 1;
+
+    var nextLinkId = countEntity.CountLong;
+    if (nextLinkId <= 0)
+      return 1;
+
+    return nextLinkId + 1;
+  }
 }

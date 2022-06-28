@@ -9,22 +9,19 @@ namespace RnGo.Controllers;
 [Route("links")]
 public class LinkController : ControllerBase
 {
-  private readonly ILinkService _linkService;
+  private readonly ILinkService _linkSvc;
 
-  public LinkController(ILinkService linkService)
+  public LinkController(ILinkService linkSvc)
   {
-    _linkService = linkService;
+    _linkSvc = linkSvc;
   }
 
   [HttpPost, Route("")]
-  public async Task<AddLinkResponse> StoreLink([FromBody] AddLinkRequest request)
-  {
-    return await _linkService.AddLink(request);
-  }
+  public async Task<AddLinkResponse> StoreLink(
+    [FromBody] AddLinkRequest request) =>
+    await _linkSvc.AddLink(request);
 
   [HttpGet, Route("count")]
-  public async Task<long> GetLinkCount()
-  {
-    return await _linkService.GetLinkCount();
-  }
+  public async Task<long> GetLinkCount() =>
+    await _linkSvc.GetLinkCount();
 }

@@ -8,8 +8,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Rn.NetCore.Common" Version="6.0.0.109" />
-    <PackageReference Include="Rn.NetCore.DbCommon" Version="6.0.0.104" />
+    <PackageReference Include="Rn.NetCore.Common" Version="6.1.0.100" />
+    <PackageReference Include="Rn.NetCore.DbCommon" Version="6.1.1.102" />
   </ItemGroup>
 
 </Project>
