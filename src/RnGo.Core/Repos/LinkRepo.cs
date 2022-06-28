@@ -18,8 +18,8 @@ public class LinkRepo : BaseRepo<LinkRepo>, ILinkRepo
 {
   private readonly ILinkRepoQueries _queries;
 
-  public LinkRepo(IServiceProvider serviceProvider, ILinkRepoQueries queries)
-    : base(serviceProvider)
+  public LinkRepo(IBaseRepoHelper baseRepoHelper, ILinkRepoQueries queries)
+    : base(baseRepoHelper)
   {
     _queries = queries;
   }

@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NLog.Extensions.Logging;
@@ -6,8 +6,7 @@ using Rn.NetCore.Common.Abstractions;
 using Rn.NetCore.Common.Helpers;
 using Rn.NetCore.Common.Logging;
 using Rn.NetCore.DbCommon;
-using Rn.NetCore.DbCommon.Helpers;
-using Rn.NetCore.Metrics;
+using Rn.NetCore.Metrics.Extensions;
 using RnGo.Core.Entities;
 using RnGo.Core.Helpers;
 using RnGo.Core.Models;
@@ -189,15 +188,13 @@ public class RnGoDevelopment
       .AddSingleton<IDateTimeAbstraction, DateTimeAbstraction>()
 
       // Metrics
-      .AddSingleton<IMetricServiceUtils, MetricServiceUtils>()
-      .AddSingleton<IMetricService, MetricService>()
+      .AddRnMetricsBase(config)
 
       // Providers
       .AddSingleton<IRnGoConfigProvider, RnGoConfigProvider>()
 
       // Database
-      .AddSingleton<IConnectionResolver>(new ConnectionResolver(config, "RnGo"))
-      .AddSingleton<IDbConnectionHelper, MySqlConnectionHelper>()
+      .AddRnDbMySql(config)
       .AddSingleton<ILinkRepo, LinkRepo>()
       .AddSingleton<IApiKeyRepo, ApiKeyRepo>()
       .AddSingleton<ILinkRepoQueries, LinkRepoQueries>()

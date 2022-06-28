@@ -15,8 +15,8 @@ public class ApiKeyRepo : BaseRepo<ApiKeyRepo>, IApiKeyRepo
 {
   private readonly IApiKeyRepoQueries _queries;
 
-  public ApiKeyRepo(IServiceProvider serviceProvider, IApiKeyRepoQueries queries)
-    : base(serviceProvider)
+  public ApiKeyRepo(IBaseRepoHelper baseRepoHelper, IApiKeyRepoQueries queries)
+    : base(baseRepoHelper)
   {
     _queries = queries;
 

@@ -3,8 +3,7 @@ using Rn.NetCore.Common.Abstractions;
 using Rn.NetCore.Common.Helpers;
 using Rn.NetCore.Common.Logging;
 using Rn.NetCore.DbCommon;
-using Rn.NetCore.DbCommon.Helpers;
-using Rn.NetCore.Metrics;
+using Rn.NetCore.Metrics.Extensions;
 using RnGo.Core.Helpers;
 using RnGo.Core.Providers;
 using RnGo.Core.RepoQueries;
@@ -45,12 +44,10 @@ builder.Services
   .AddSingleton(typeof(ILoggerAdapter<>), typeof(LoggerAdapter<>))
 
   // Metrics
-  .AddSingleton<IMetricServiceUtils, MetricServiceUtils>()
-  .AddSingleton<IMetricService, MetricService>()
+  .AddRnMetricsBase(builder.Configuration)
 
   // Database
-  .AddSingleton<IConnectionResolver>(new ConnectionResolver(builder.Configuration, "RnGo"))
-  .AddSingleton<IDbConnectionHelper, MySqlConnectionHelper>()
+  .AddRnDbMySql(builder.Configuration)
   .AddSingleton<ILinkRepo, LinkRepo>()
   .AddSingleton<IApiKeyRepo, ApiKeyRepo>()
   .AddSingleton<ILinkRepoQueries, LinkRepoQueries>()
