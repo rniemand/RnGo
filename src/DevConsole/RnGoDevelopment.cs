@@ -1,13 +1,7 @@
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using NLog.Extensions.Logging;
 using Rn.NetCore.Common.Helpers;
 using Rn.NetCore.Common.Logging;
-using Rn.NetCore.DbCommon;
-using Rn.NetCore.Metrics.Extensions;
 using RnGo.Core.Entities;
-using RnGo.Core.Extensions;
 using RnGo.Core.Helpers;
 using RnGo.Core.Models;
 using RnGo.Core.Repos;
@@ -17,13 +11,6 @@ namespace DevConsole;
 
 public class RnGoDevelopment
 {
-  private readonly IServiceProvider _services;
-
-  public RnGoDevelopment()
-  {
-    _services = BuildServiceContainer();
-  }
-
   public RnGoDevelopment DoNothing()
   {
     return this;
@@ -31,7 +18,7 @@ public class RnGoDevelopment
 
   public RnGoDevelopment HelloWorld()
   {
-    _services
+    DIContainer.Services
       .GetRequiredService<ILoggerAdapter<RnGoDevelopment>>()
       .LogInformation("Hello World");
 
@@ -40,7 +27,7 @@ public class RnGoDevelopment
 
   public RnGoDevelopment ResolveLink()
   {
-    _services
+    DIContainer.Services
       .GetRequiredService<ILinkService>()
       .Resolve("a");
 
@@ -49,7 +36,7 @@ public class RnGoDevelopment
 
   public RnGoDevelopment Base64Encode()
   {
-    var helper = _services.GetRequiredService<IStringHelper>();
+    var helper = DIContainer.Services.GetRequiredService<IStringHelper>();
     var encoded = helper.Base64Encode("hello");
     Console.WriteLine("Encoded: " + encoded);
     var decoded = helper.Base64Decode(encoded);
@@ -59,7 +46,7 @@ public class RnGoDevelopment
 
   public RnGoDevelopment GenerateLinkString(long input)
   {
-    var linkString = _services
+    var linkString = DIContainer.Services
       .GetRequiredService<IStringHelper>()
       .GenerateLinkString(input);
 
@@ -69,7 +56,7 @@ public class RnGoDevelopment
 
   public RnGoDevelopment AddLink(string url, string? apiKey = null)
   {
-    var linkService = _services.GetRequiredService<ILinkService>();
+    var linkService = DIContainer.Services.GetRequiredService<ILinkService>();
 
     var response = linkService
       .AddLink(new AddLinkRequest
@@ -87,9 +74,10 @@ public class RnGoDevelopment
 
   public RnGoDevelopment ResolveLink(string shortCode)
   {
-    var jsonHelper = _services.GetRequiredService<IJsonHelper>();
+    var services = DIContainer.Services;
+    var jsonHelper = services.GetRequiredService<IJsonHelper>();
 
-    var resolvedLink = _services
+    var resolvedLink = services
       .GetRequiredService<ILinkService>()
       .Resolve(shortCode)
       .GetAwaiter()
@@ -102,7 +90,7 @@ public class RnGoDevelopment
 
   public RnGoDevelopment AddDatabaseLink()
   {
-    var repo = _services.GetRequiredService<ILinkRepo>();
+    var repo = DIContainer.Services.GetRequiredService<ILinkRepo>();
 
     repo
       .AddLink(new LinkEntity
@@ -119,7 +107,7 @@ public class RnGoDevelopment
 
   public RnGoDevelopment GetLinkCount()
   {
-    var urlCount = _services
+    var urlCount = DIContainer.Services
       .GetRequiredService<ILinkService>()
       .GetLinkCount()
       .GetAwaiter()
@@ -132,7 +120,7 @@ public class RnGoDevelopment
 
   public RnGoDevelopment StoreApiKey(string apiKey)
   {
-    var apiKeyRepo = _services.GetRequiredService<IApiKeyRepo>();
+    var apiKeyRepo = DIContainer.Services.GetRequiredService<IApiKeyRepo>();
     var apiKeyEntity = apiKeyRepo.GetByApiKey(apiKey).GetAwaiter().GetResult();
     if (apiKeyEntity is null)
     {
@@ -143,31 +131,5 @@ public class RnGoDevelopment
     Console.WriteLine(apiKeyEntity.ApiKey);
 
     return this;
-  }
-
-  private static IServiceProvider BuildServiceContainer()
-  {
-    var services = new ServiceCollection();
-
-    var config = new ConfigurationBuilder()
-      .SetBasePath(Directory.GetCurrentDirectory())
-      .AddJsonFile("appsettings.json", true, true)
-      .Build();
-
-    services
-      .AddSingleton<IConfiguration>(config)
-      .AddRnMetricsBase(config)
-      .AddRnDbMySql(config)
-      .AddRnGo(config)
-
-      .AddLogging(loggingBuilder =>
-      {
-        // configure Logging with NLog
-        loggingBuilder.ClearProviders();
-        loggingBuilder.SetMinimumLevel(LogLevel.Trace);
-        loggingBuilder.AddNLog(config);
-      });
-
-    return services.BuildServiceProvider();
   }
 }
