@@ -31,8 +31,6 @@ public static class ServiceCollectionExtensions
     return services
       // Services
       .AddSingleton<ILinkService, LinkService>()
-      .AddSingleton<ILinkStorageService, LinkStorageService>()
-      .AddSingleton<ILinkStatsService, LinkStatsService>()
       .AddSingleton<IApiKeyService, ApiKeyService>()
 
       // Helpers
