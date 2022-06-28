@@ -55,7 +55,7 @@ public class ApiKeyService : IApiKeyService
     // Will be extended out to revoke keys in the future
     ApiKeys.Clear();
 
-    var dbApiKeys = await _apiKeyRepo.GetEnabledApiKeys();
+    var dbApiKeys = await _apiKeyRepo.GetEnabledAsync();
     ApiKeys.AddRange(dbApiKeys.Select(x => x.ApiKey));
 
     _logger.LogInformation("Loaded {count} enabled API keys", ApiKeys.Count);

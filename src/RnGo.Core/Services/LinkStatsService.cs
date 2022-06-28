@@ -25,5 +25,5 @@ public class LinkStatsService : ILinkStatsService
 
   // Interface methods
   public async Task RecordLinkFollow(LinkEntity link) =>
-    await _linkRepo.UpdateFollowCount(link.LinkId);
+    await _linkRepo.UpdateFollowCountAsync(link.LinkId);
 }

@@ -6,9 +6,9 @@ namespace RnGo.Core.Repos;
 
 public interface IApiKeyRepo
 {
-  Task<int> Add(string apiKey);
-  Task<ApiKeyEntity?> GetByApiKey(string apiKey);
-  Task<List<ApiKeyEntity>> GetEnabledApiKeys();
+  Task<int> AddAsync(string apiKey);
+  Task<ApiKeyEntity?> GetAsync(string apiKey);
+  Task<List<ApiKeyEntity>> GetEnabledAsync();
 }
 
 public class ApiKeyRepo : BaseRepo<ApiKeyRepo>, IApiKeyRepo
@@ -22,29 +22,18 @@ public class ApiKeyRepo : BaseRepo<ApiKeyRepo>, IApiKeyRepo
 
   }
 
-  public async Task<int> Add(string apiKey)
-  {
-    return await ExecuteAsync(
-      nameof(Add),
-      _queries.Add(),
-      new {ApiKey = apiKey}
-    );
-  }
+  public async Task<int> AddAsync(string apiKey) =>
+    await ExecuteAsync(nameof(AddAsync), _queries.Add(), new
+    {
+      ApiKey = apiKey
+    });
 
-  public async Task<ApiKeyEntity?> GetByApiKey(string apiKey)
-  {
-    return await GetSingle<ApiKeyEntity>(
-      nameof(GetByApiKey),
-      _queries.GetByApiKey(),
-      new {ApiKey = apiKey}
-    );
-  }
+  public async Task<ApiKeyEntity?> GetAsync(string apiKey) =>
+    await GetSingle<ApiKeyEntity>(nameof(GetAsync), _queries.Get(), new
+    {
+      ApiKey = apiKey
+    });
 
-  public async Task<List<ApiKeyEntity>> GetEnabledApiKeys()
-  {
-    return await GetList<ApiKeyEntity>(
-      nameof(GetEnabledApiKeys),
-      _queries.GetEnabledApiKeys()
-    );
-  }
+  public async Task<List<ApiKeyEntity>> GetEnabledAsync() =>
+    await GetList<ApiKeyEntity>(nameof(GetEnabledAsync), _queries.GetEnabled());
 }

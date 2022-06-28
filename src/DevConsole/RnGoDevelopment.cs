@@ -1,4 +1,4 @@
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using RnGo.Core.Entities;
 using RnGo.Core.Helpers;
 using RnGo.Core.Models;
@@ -57,7 +57,7 @@ public static class RnGoDevelopment
   {
     await DIContainer.Services
       .GetRequiredService<ILinkRepo>()
-      .AddLink(new LinkEntity
+      .AddAsync(new LinkEntity
       {
         Url = "https://docs.google.com/spreadsheets",
         ShortCode = "2"
@@ -78,12 +78,12 @@ public static class RnGoDevelopment
   public static async Task<ApiKeyEntity> StoreApiKey(string apiKey)
   {
     var apiKeyRepo = DIContainer.Services.GetRequiredService<IApiKeyRepo>();
-    var apiKeyEntity = await apiKeyRepo.GetByApiKey(apiKey);
+    var apiKeyEntity = await apiKeyRepo.GetAsync(apiKey);
 
     if (apiKeyEntity is null)
     {
-      await apiKeyRepo.Add(apiKey);
-      apiKeyEntity = await apiKeyRepo.GetByApiKey(apiKey);
+      await apiKeyRepo.AddAsync(apiKey);
+      apiKeyEntity = await apiKeyRepo.GetAsync(apiKey);
     }
 
     Console.WriteLine(apiKeyEntity!.ApiKey);

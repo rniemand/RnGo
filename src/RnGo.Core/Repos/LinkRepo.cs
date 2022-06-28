@@ -6,12 +6,12 @@ namespace RnGo.Core.Repos;
 
 public interface ILinkRepo
 {
-  Task<int> AddLink(LinkEntity entity);
-  Task<LinkEntity?> GetByUrl(string url);
-  Task<GenericCountEntity?> GetMaxLinkId();
-  Task<LinkEntity?> GetById(long linkId);
-  Task<LinkEntity?> GetByShortCode(string shortCode);
-  Task<int> UpdateFollowCount(long linkId);
+  Task<int> AddAsync(LinkEntity entity);
+  Task<LinkEntity?> GetByUrlAsync(string url);
+  Task<GenericCountEntity?> GetMaxLinkIdAsync();
+  Task<LinkEntity?> GetByIdAsync(long linkId);
+  Task<LinkEntity?> GetByShortCodeAsync(string shortCode);
+  Task<int> UpdateFollowCountAsync(long linkId);
 }
 
 public class LinkRepo : BaseRepo<LinkRepo>, ILinkRepo
@@ -25,56 +25,33 @@ public class LinkRepo : BaseRepo<LinkRepo>, ILinkRepo
   }
 
   // Interface methods
-  public async Task<int> AddLink(LinkEntity entity)
-  {
-    return await ExecuteAsync(
-      nameof(AddLink),
-      _queries.AddLink(),
-      entity
-    );
-  }
+  public async Task<int> AddAsync(LinkEntity entity) =>
+    await ExecuteAsync(nameof(AddAsync), _queries.Add(), entity);
 
-  public async Task<LinkEntity?> GetByUrl(string url)
-  {
-    return await GetSingle<LinkEntity>(
-      nameof(GetByUrl),
-      _queries.GetByUrl(),
-      new { Url = url }
-    );
-  }
+  public async Task<LinkEntity?> GetByUrlAsync(string url) =>
+    await GetSingle<LinkEntity>(nameof(GetByUrlAsync), _queries.GetByUrl(), new
+    {
+      Url = url
+    });
 
-  public async Task<GenericCountEntity?> GetMaxLinkId()
-  {
-    return await GetSingle<GenericCountEntity>(
-      nameof(GetMaxLinkId),
-      _queries.GetMaxLinkId()
-    );
-  }
+  public async Task<GenericCountEntity?> GetMaxLinkIdAsync() =>
+    await GetSingle<GenericCountEntity>(nameof(GetMaxLinkIdAsync), _queries.GetMaxLinkId());
 
-  public async Task<LinkEntity?> GetById(long linkId)
-  {
-    return await GetSingle<LinkEntity>(
-      nameof(GetById),
-      _queries.GetById(),
-      new { LinkId = linkId }
-    );
-  }
+  public async Task<LinkEntity?> GetByIdAsync(long linkId) =>
+    await GetSingle<LinkEntity>(nameof(GetByIdAsync), _queries.GetById(), new
+    {
+      LinkId = linkId
+    });
 
-  public async Task<LinkEntity?> GetByShortCode(string shortCode)
-  {
-    return await GetSingle<LinkEntity>(
-      nameof(GetByShortCode),
-      _queries.GetByShortCode(),
-      new { ShortCode = shortCode }
-    );
-  }
+  public async Task<LinkEntity?> GetByShortCodeAsync(string shortCode) =>
+    await GetSingle<LinkEntity>(nameof(GetByShortCodeAsync), _queries.GetByShortCode(), new
+    {
+      ShortCode = shortCode
+    });
 
-  public async Task<int> UpdateFollowCount(long linkId)
-  {
-    return await ExecuteAsync(
-      nameof(UpdateFollowCount),
-      _queries.UpdateFollowCount(),
-      new { LinkId = linkId }
-    );
-  }
+  public async Task<int> UpdateFollowCountAsync(long linkId) =>
+    await ExecuteAsync(nameof(UpdateFollowCountAsync), _queries.UpdateFollowCount(), new
+    {
+      LinkId = linkId
+    });
 }

@@ -40,7 +40,7 @@ public class LinkStorageService : ILinkStorageService
   public async Task<RnGoLinkDto?> GetByUrl(string url) =>
     string.IsNullOrWhiteSpace(url)
       ? null
-      : (await _linkRepo.GetByUrl(url)).ToDto();
+      : (await _linkRepo.GetByUrlAsync(url)).ToDto();
 
   public async Task<string> StoreLink(string url)
   {
@@ -49,7 +49,7 @@ public class LinkStorageService : ILinkStorageService
     var linkEntity = new LinkEntity(url, shortCode);
       
     // Add the link to the DB
-    var rowCount = await _linkRepo.AddLink(linkEntity);
+    var rowCount = await _linkRepo.AddAsync(linkEntity);
     if (rowCount <= 0)
     {
       _logger.LogError("Failed to store link: {url}", url);
@@ -57,7 +57,7 @@ public class LinkStorageService : ILinkStorageService
     }
 
     // Fetch the generated link from the DB
-    var dbLink = await _linkRepo.GetById(linkId);
+    var dbLink = await _linkRepo.GetByIdAsync(linkId);
     if (dbLink is not null)
       return dbLink.ShortCode;
 
@@ -68,12 +68,12 @@ public class LinkStorageService : ILinkStorageService
 
   public async Task<LinkEntity?> GetByShortCode(string shortCode)
   {
-    return await _linkRepo.GetByShortCode(shortCode);
+    return await _linkRepo.GetByShortCodeAsync(shortCode);
   }
 
   public async Task<long> GetLinkCount()
   {
-    var countEntity = await _linkRepo.GetMaxLinkId();
+    var countEntity = await _linkRepo.GetMaxLinkIdAsync();
 
     return countEntity?.CountLong ?? 0;
   }
@@ -82,7 +82,7 @@ public class LinkStorageService : ILinkStorageService
   // Internal methods
   private long GetNextLinkId()
   {
-    var countEntity = _linkRepo.GetMaxLinkId().GetAwaiter().GetResult();
+    var countEntity = _linkRepo.GetMaxLinkIdAsync().GetAwaiter().GetResult();
     if (countEntity is null)
       return 1;
 
