@@ -1,10 +1,10 @@
-﻿namespace RnGo.Core.Helpers;
+namespace RnGo.Core.Helpers;
 
 public struct Base36
 {
   // https://www.codeproject.com/Articles/10619/Base-36-type-for-NET-C
-  public static readonly Base36 MaxValue = new Base36(long.MaxValue);
-  public static readonly Base36 MinValue = new Base36(long.MinValue + 1);
+  public static readonly Base36 MaxValue = new(long.MaxValue);
+  public static readonly Base36 MinValue = new(long.MinValue + 1);
 
   private long _numericValue;
 
@@ -17,7 +17,7 @@ public struct Base36
   public Base36(string value)
   {
     _numericValue = 0; //required by the struct.
-    this.Value = value;
+    Value = value;
   }
 
   public long NumericValue

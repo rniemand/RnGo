@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Logging;
 using RnGo.Core.Entities;
+using RnGo.Core.Extensions;
 using RnGo.Core.Helpers;
 using RnGo.Core.Models.Dto;
 using RnGo.Core.Repos;
@@ -36,15 +37,10 @@ public class LinkStorageService : ILinkStorageService
 
 
   // Interface methods
-  public async Task<RnGoLinkDto?> GetByUrl(string url)
-  {
-    if (string.IsNullOrWhiteSpace(url))
-      return null;
-
-    return RnGoLinkDto.FromEntity(
-      await _linkRepo.GetByUrl(url)
-    );
-  }
+  public async Task<RnGoLinkDto?> GetByUrl(string url) =>
+    string.IsNullOrWhiteSpace(url)
+      ? null
+      : (await _linkRepo.GetByUrl(url)).ToDto();
 
   public async Task<string> StoreLink(string url)
   {
