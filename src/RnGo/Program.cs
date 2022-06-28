@@ -1,14 +1,7 @@
 using NLog.Extensions.Logging;
-using Rn.NetCore.Common.Abstractions;
-using Rn.NetCore.Common.Helpers;
-using Rn.NetCore.Common.Logging;
 using Rn.NetCore.DbCommon;
 using Rn.NetCore.Metrics.Extensions;
-using RnGo.Core.Helpers;
-using RnGo.Core.Providers;
-using RnGo.Core.RepoQueries;
-using RnGo.Core.Repos;
-using RnGo.Core.Services;
+using RnGo.Core.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,36 +15,9 @@ builder.Logging.SetMinimumLevel(LogLevel.Trace);
 builder.Logging.AddNLog();
 
 builder.Services
-  // Services
-  .AddSingleton<ILinkService, LinkService>()
-  .AddSingleton<ILinkStorageService, LinkStorageService>()
-  .AddSingleton<ILinkStatsService, LinkStatsService>()
-  .AddSingleton<IApiKeyService, ApiKeyService>()
-
-  // Helpers
-  .AddSingleton<IStringHelper, StringHelper>()
-  .AddSingleton<IJsonHelper, JsonHelper>()
-
-  // Abstractions
-  .AddSingleton<IFileAbstraction, FileAbstraction>()
-  .AddSingleton<IDirectoryAbstraction, DirectoryAbstraction>()
-  .AddSingleton<IEnvironmentAbstraction, EnvironmentAbstraction>()
-  .AddSingleton<IPathAbstraction, PathAbstraction>()
-  .AddSingleton<IDateTimeAbstraction, DateTimeAbstraction>()
-
-  // Providers
-  .AddSingleton<IRnGoConfigProvider, RnGoConfigProvider>()
-  .AddSingleton(typeof(ILoggerAdapter<>), typeof(LoggerAdapter<>))
-
-  // Metrics
   .AddRnMetricsBase(builder.Configuration)
-
-  // Database
   .AddRnDbMySql(builder.Configuration)
-  .AddSingleton<ILinkRepo, LinkRepo>()
-  .AddSingleton<IApiKeyRepo, ApiKeyRepo>()
-  .AddSingleton<ILinkRepoQueries, LinkRepoQueries>()
-  .AddSingleton<IApiKeyRepoQueries, ApiKeyRepoQueries>();
+  .AddRnGo(builder.Configuration);
 
 var app = builder.Build();
 

@@ -2,16 +2,14 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NLog.Extensions.Logging;
-using Rn.NetCore.Common.Abstractions;
 using Rn.NetCore.Common.Helpers;
 using Rn.NetCore.Common.Logging;
 using Rn.NetCore.DbCommon;
 using Rn.NetCore.Metrics.Extensions;
 using RnGo.Core.Entities;
+using RnGo.Core.Extensions;
 using RnGo.Core.Helpers;
 using RnGo.Core.Models;
-using RnGo.Core.Providers;
-using RnGo.Core.RepoQueries;
 using RnGo.Core.Repos;
 using RnGo.Core.Services;
 
@@ -157,48 +155,18 @@ public class RnGoDevelopment
       .Build();
 
     services
-      // Configuration
       .AddSingleton<IConfiguration>(config)
+      .AddRnMetricsBase(config)
+      .AddRnDbMySql(config)
+      .AddRnGo(config)
 
-      // Logging
-      .AddSingleton(typeof(ILoggerAdapter<>), typeof(LoggerAdapter<>))
       .AddLogging(loggingBuilder =>
       {
         // configure Logging with NLog
         loggingBuilder.ClearProviders();
         loggingBuilder.SetMinimumLevel(LogLevel.Trace);
         loggingBuilder.AddNLog(config);
-      })
-
-      // Services
-      .AddSingleton<ILinkService, LinkService>()
-      .AddSingleton<ILinkStorageService, LinkStorageService>()
-      .AddSingleton<ILinkStatsService, LinkStatsService>()
-      .AddSingleton<IApiKeyService, ApiKeyService>()
-
-      // Helpers
-      .AddSingleton<IStringHelper, StringHelper>()
-      .AddSingleton<IJsonHelper, JsonHelper>()
-
-      // Abstractions
-      .AddSingleton<IFileAbstraction, FileAbstraction>()
-      .AddSingleton<IDirectoryAbstraction, DirectoryAbstraction>()
-      .AddSingleton<IEnvironmentAbstraction, EnvironmentAbstraction>()
-      .AddSingleton<IPathAbstraction, PathAbstraction>()
-      .AddSingleton<IDateTimeAbstraction, DateTimeAbstraction>()
-
-      // Metrics
-      .AddRnMetricsBase(config)
-
-      // Providers
-      .AddSingleton<IRnGoConfigProvider, RnGoConfigProvider>()
-
-      // Database
-      .AddRnDbMySql(config)
-      .AddSingleton<ILinkRepo, LinkRepo>()
-      .AddSingleton<IApiKeyRepo, ApiKeyRepo>()
-      .AddSingleton<ILinkRepoQueries, LinkRepoQueries>()
-      .AddSingleton<IApiKeyRepoQueries, ApiKeyRepoQueries>();
+      });
 
     return services.BuildServiceProvider();
   }
