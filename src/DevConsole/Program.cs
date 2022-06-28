@@ -1,6 +1,6 @@
 using DevConsole;
 
-//var linkUrl = await RnGoDevelopment.ResolveLink("a");
+var linkUrl = await RnGoDevelopment.ResolveLink("a");
 //var encoded = RnGoDevelopment.Base64Encode("Hello");
 //var generatedLink = RnGoDevelopment.GenerateLinkString(121);
 //var addLinkResponse = await RnGoDevelopment.AddLink("http://google.ca");

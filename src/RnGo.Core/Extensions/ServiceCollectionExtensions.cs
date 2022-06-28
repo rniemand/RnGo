@@ -5,7 +5,6 @@ using Rn.NetCore.Common.Abstractions;
 using Rn.NetCore.Common.Helpers;
 using Rn.NetCore.Common.Logging;
 using RnGo.Core.Helpers;
-using RnGo.Core.Providers;
 using RnGo.Core.RepoQueries;
 using RnGo.Core.Repos;
 using RnGo.Core.Services;
@@ -38,9 +37,6 @@ public static class ServiceCollectionExtensions
 
       // Helpers
       .AddSingleton<IStringHelper, StringHelper>()
-
-      // Providers
-      .AddSingleton<IRnGoConfigProvider, RnGoConfigProvider>()
 
       // DB: Repositories
       .AddSingleton<ILinkRepo, LinkRepo>()
