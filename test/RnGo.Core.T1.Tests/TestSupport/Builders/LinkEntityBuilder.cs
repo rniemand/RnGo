@@ -1,10 +1,14 @@
 using RnGo.Core.Entities;
+using RnGo.Core.Models;
 
 namespace RnGo.Core.T1.Tests.TestSupport.Builders;
 
 public class LinkEntityBuilder
 {
   private readonly LinkEntity _entity = new();
+
+  public LinkEntityBuilder FromAddLinkRequest(AddLinkRequest request) =>
+    WithUrl(request.Url);
 
   public LinkEntityBuilder WithLinkId(long linkId)
   {

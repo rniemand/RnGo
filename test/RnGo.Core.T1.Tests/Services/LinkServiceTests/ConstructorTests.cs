@@ -15,7 +15,7 @@ namespace RnGo.Core.T1.Tests.Services.LinkServiceTests;
 [TestFixture]
 public class ConstructorTests
 {
-  private const string SampleLinkUrl = "https://richardn.ca";
+  private const string LinkUrl = "https://richardn.ca";
   private const string ApiKey = "0E25C180-0BB7-44A6-B0AE-3BF03D4E9D29";
 
   [Test]
@@ -27,7 +27,7 @@ public class ConstructorTests
     var stringHelper = Substitute.For<IStringHelper>();
 
     var addLinkRequest = new AddLinkRequestBuilder()
-      .WithUrl(SampleLinkUrl)
+      .WithUrl(LinkUrl)
       .WithApiKey(ApiKey)
       .Build();
 
@@ -36,7 +36,7 @@ public class ConstructorTests
       .Returns(true);
 
     linkRepo
-      .GetByUrlAsync(SampleLinkUrl)
+      .GetByUrlAsync(LinkUrl)
       .ReturnsNull();
 
     // act
@@ -60,7 +60,7 @@ public class ConstructorTests
     var stringHelper = Substitute.For<IStringHelper>();
 
     var addLinkRequest = new AddLinkRequestBuilder()
-      .WithUrl(SampleLinkUrl)
+      .WithUrl(LinkUrl)
       .WithApiKey(ApiKey)
       .Build();
 
@@ -69,7 +69,7 @@ public class ConstructorTests
       .Returns(true);
 
     linkRepo
-      .GetByUrlAsync(SampleLinkUrl)
+      .GetByUrlAsync(LinkUrl)
       .ReturnsNull();
 
     linkRepo

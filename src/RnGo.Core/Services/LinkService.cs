@@ -51,15 +51,12 @@ public class LinkService : ILinkService
   {
     var response = new AddLinkResponse();
 
-    // Ensure that this is a valid URL
     if (!IsValidLink(request.Url))
       return response.WithFailure("Invalid URL");
 
-    // Ensure that this is a valid API key
     if (!await _apiKeyService.IsValidApiKeyAsync(request.ApiKey))
       return response.WithFailure("Invalid API key");
 
-    // Check for an already existing link first
     var existingLink = await _linkRepo.GetByUrlAsync(request.Url);
     if (existingLink is not null)
       return response.WithSuccess(existingLink.ShortCode);
