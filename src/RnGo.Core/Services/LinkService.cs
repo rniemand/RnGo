@@ -22,8 +22,7 @@ public class LinkService : ILinkService
   private readonly IStringHelper _stringHelper;
   private long _nextLinkId;
 
-  public LinkService(
-    ILoggerAdapter<LinkService> logger,
+  public LinkService(ILoggerAdapter<LinkService> logger,
     IApiKeyService apiKeyService,
     ILinkRepo linkRepo,
     IStringHelper stringHelper)
