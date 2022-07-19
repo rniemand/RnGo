@@ -10,7 +10,7 @@ namespace RnGo.Core.Services;
 public interface ILinkService
 {
   Task<string> Resolve(string shortCode);
-  Task<AddLinkResponse> AddLink(AddLinkRequest request);
+  Task<AddLinkResponse> AddLinkAsync(AddLinkRequest request);
   Task<long> GetLinkCount();
 }
 
@@ -47,7 +47,7 @@ public class LinkService : ILinkService
     return link.Url;
   }
 
-  public async Task<AddLinkResponse> AddLink(AddLinkRequest request)
+  public async Task<AddLinkResponse> AddLinkAsync(AddLinkRequest request)
   {
     var response = new AddLinkResponse();
 
@@ -56,7 +56,7 @@ public class LinkService : ILinkService
       return response.WithFailure("Invalid URL");
 
     // Ensure that this is a valid API key
-    if (!await _apiKeyService.IsValidApiKey(request.ApiKey))
+    if (!await _apiKeyService.IsValidApiKeyAsync(request.ApiKey))
       return response.WithFailure("Invalid API key");
 
     // Check for an already existing link first
@@ -104,7 +104,7 @@ public class LinkService : ILinkService
 
     var nextLinkId = countEntity.CountLong;
     if (nextLinkId <= 0)
-      return 1;
+      throw new Exception("Unable to determine next link ID!");
 
     return nextLinkId + 1;
   }

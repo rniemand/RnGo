@@ -42,7 +42,7 @@ public static class RnGoDevelopment
     var linkService = DIContainer.Services.GetRequiredService<ILinkService>();
 
     var response = await linkService
-      .AddLink(new AddLinkRequest
+      .AddLinkAsync(new AddLinkRequest
       {
         Url = url,
         ApiKey = apiKey ?? "18A8B66F-B4F1-4814-8771-D1EABD9CFB43"
