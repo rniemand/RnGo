@@ -6,7 +6,7 @@ namespace RnGo.Core.Services;
 
 public interface IApiKeyService
 {
-  Task<bool> IsValidApiKey(string apiKey);
+  Task<bool> IsValidApiKeyAsync(string apiKey);
 }
 
 public class ApiKeyService : IApiKeyService
@@ -29,7 +29,7 @@ public class ApiKeyService : IApiKeyService
 
 
   // Public methods
-  public async Task<bool> IsValidApiKey(string apiKey)
+  public async Task<bool> IsValidApiKeyAsync(string apiKey)
   {
     await RefreshApiKeys();
     if (ApiKeys.Count == 0)

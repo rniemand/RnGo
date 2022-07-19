@@ -9,8 +9,8 @@ namespace RnGo.Core.Services;
 
 public interface ILinkService
 {
-  Task<string> Resolve(string shortCode);
-  Task<AddLinkResponse> AddLink(AddLinkRequest request);
+  Task<string> ResolveAsync(string shortCode);
+  Task<AddLinkResponse> AddLinkAsync(AddLinkRequest request);
   Task<long> GetLinkCount();
 }
 
@@ -22,8 +22,7 @@ public class LinkService : ILinkService
   private readonly IStringHelper _stringHelper;
   private long _nextLinkId;
 
-  public LinkService(
-    ILoggerAdapter<LinkService> logger,
+  public LinkService(ILoggerAdapter<LinkService> logger,
     IApiKeyService apiKeyService,
     ILinkRepo linkRepo,
     IStringHelper stringHelper)
@@ -36,7 +35,7 @@ public class LinkService : ILinkService
     _nextLinkId = GetNextLinkId();
   }
 
-  public async Task<string> Resolve(string shortCode)
+  public async Task<string> ResolveAsync(string shortCode)
   {
     var link = await _linkRepo.GetByShortCodeAsync(shortCode);
 
@@ -48,19 +47,16 @@ public class LinkService : ILinkService
     return link.Url;
   }
 
-  public async Task<AddLinkResponse> AddLink(AddLinkRequest request)
+  public async Task<AddLinkResponse> AddLinkAsync(AddLinkRequest request)
   {
     var response = new AddLinkResponse();
 
-    // Ensure that this is a valid URL
     if (!IsValidLink(request.Url))
       return response.WithFailure("Invalid URL");
 
-    // Ensure that this is a valid API key
-    if (!await _apiKeyService.IsValidApiKey(request.ApiKey))
+    if (!await _apiKeyService.IsValidApiKeyAsync(request.ApiKey))
       return response.WithFailure("Invalid API key");
 
-    // Check for an already existing link first
     var existingLink = await _linkRepo.GetByUrlAsync(request.Url);
     if (existingLink is not null)
       return response.WithSuccess(existingLink.ShortCode);
@@ -105,7 +101,7 @@ public class LinkService : ILinkService
 
     var nextLinkId = countEntity.CountLong;
     if (nextLinkId <= 0)
-      return 1;
+      throw new Exception("Unable to determine next link ID!");
 
     return nextLinkId + 1;
   }

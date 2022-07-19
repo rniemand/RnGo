@@ -19,7 +19,7 @@ public class LinkController : ControllerBase
   [HttpPost, Route("")]
   public async Task<AddLinkResponse> StoreLink(
     [FromBody] AddLinkRequest request) =>
-    await _linkSvc.AddLink(request);
+    await _linkSvc.AddLinkAsync(request);
 
   [HttpGet, Route("count")]
   public async Task<long> GetLinkCount() =>
