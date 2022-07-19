@@ -14,7 +14,7 @@ public static class RnGoDevelopment
   {
     return await DIContainer.Services
       .GetRequiredService<ILinkService>()
-      .Resolve(shortCode);
+      .ResolveAsync(shortCode);
   }
 
   public static string Base64Encode(string input)

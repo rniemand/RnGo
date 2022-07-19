@@ -9,7 +9,7 @@ namespace RnGo.Core.Services;
 
 public interface ILinkService
 {
-  Task<string> Resolve(string shortCode);
+  Task<string> ResolveAsync(string shortCode);
   Task<AddLinkResponse> AddLinkAsync(AddLinkRequest request);
   Task<long> GetLinkCount();
 }
@@ -35,7 +35,7 @@ public class LinkService : ILinkService
     _nextLinkId = GetNextLinkId();
   }
 
-  public async Task<string> Resolve(string shortCode)
+  public async Task<string> ResolveAsync(string shortCode)
   {
     var link = await _linkRepo.GetByShortCodeAsync(shortCode);
 

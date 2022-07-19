@@ -17,7 +17,7 @@ public class FollowController : ControllerBase
   [HttpGet, Route("{shortCode}")]
   public async Task<ActionResult> Get(string shortCode)
   {
-    var resolvedUrl = await _linkSvc.Resolve(shortCode);
+    var resolvedUrl = await _linkSvc.ResolveAsync(shortCode);
 
     if (string.IsNullOrWhiteSpace(resolvedUrl))
       return BadRequest();

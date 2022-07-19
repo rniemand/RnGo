@@ -10,10 +10,10 @@ using RnGo.Core.Repos;
 using RnGo.Core.Services;
 using RnGo.Core.T1.Tests.TestSupport.Builders;
 
-namespace RnGo.Core.T1.Tests.Services;
+namespace RnGo.Core.T1.Tests.Services.LinkServiceTests;
 
 [TestFixture]
-public class LinkServiceTests
+public class ConstructorTests
 {
   private const string SampleLinkUrl = "https://richardn.ca";
   private const string ApiKey = "0E25C180-0BB7-44A6-B0AE-3BF03D4E9D29";
@@ -40,7 +40,7 @@ public class LinkServiceTests
       .ReturnsNull();
 
     // act
-    var linkService = GetLinkService(linkRepo: linkRepo,
+    var linkService = TestHelper.GetLinkService(linkRepo: linkRepo,
       apiKeyService: apiKeyService,
       stringHelper: stringHelper);
 
@@ -77,7 +77,7 @@ public class LinkServiceTests
       .Returns(new GenericCountEntity { CountLong = 10 });
 
     // act
-    var linkService = GetLinkService(linkRepo: linkRepo,
+    var linkService = TestHelper.GetLinkService(linkRepo: linkRepo,
       apiKeyService: apiKeyService,
       stringHelper: stringHelper);
 
@@ -93,25 +93,15 @@ public class LinkServiceTests
   {
     // arrange
     var linkRepo = Substitute.For<ILinkRepo>();
-    
+
     linkRepo
       .GetMaxLinkIdAsync()
       .Returns(new GenericCountEntity { CountLong = -10 });
 
     // act
-    var ex = Assert.Throws<Exception>(() => GetLinkService(linkRepo: linkRepo));
+    var ex = Assert.Throws<Exception>(() => TestHelper.GetLinkService(linkRepo: linkRepo));
 
     // assert
     Assert.That(ex!.Message, Is.EqualTo("Unable to determine next link ID!"));
   }
-
-
-  private static LinkService GetLinkService(ILoggerAdapter<LinkService>? logger = null,
-    IApiKeyService? apiKeyService = null,
-    ILinkRepo? linkRepo = null,
-    IStringHelper? stringHelper = null) =>
-    new(logger ?? Substitute.For<ILoggerAdapter<LinkService>>(),
-      apiKeyService ?? Substitute.For<IApiKeyService>(),
-      linkRepo ?? Substitute.For<ILinkRepo>(),
-      stringHelper ?? Substitute.For<IStringHelper>());
 }
