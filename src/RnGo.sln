@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevConsole", "DevConsole\De
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{00A0F198-09A1-4F47-A188-E5DDC6D4AB96}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RnGo.Core.T1.Tests", "..\test\RnGo.Core.T1.Tests\RnGo.Core.T1.Tests.csproj", "{A2DA7EEC-2705-44BD-A77B-ADE62FADD391}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RnGo.Core.T1.Tests", "..\tests\RnGo.Core.T1.Tests\RnGo.Core.T1.Tests.csproj", "{A2DA7EEC-2705-44BD-A77B-ADE62FADD391}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
