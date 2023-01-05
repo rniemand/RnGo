@@ -27,9 +27,9 @@
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.0" />
     <PackageReference Include="NLog" Version="5.1.1" />
     <PackageReference Include="NLog.Web.AspNetCore" Version="5.2.1" />
-    <PackageReference Include="Rn.NetCore.Common" Version="6.1.0.100" />
-    <PackageReference Include="Rn.NetCore.DbCommon" Version="6.1.1.104" />
-    <PackageReference Include="Rn.NetCore.Metrics" Version="6.1.0.102" />
+    <PackageReference Include="Rn.NetCore.Common" Version="6.1.0.101" />
+    <PackageReference Include="Rn.NetCore.DbCommon" Version="6.1.1.105" />
+    <PackageReference Include="Rn.NetCore.Metrics" Version="6.1.0.103" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
   </ItemGroup>
 
