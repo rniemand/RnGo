@@ -1,0 +1,3 @@
+* text=auto eol=lf
+
+*.{7z,gif,gz,jpg,jpeg,pdb,png,tar,tgz,webp,woff,woff2,zip} binary

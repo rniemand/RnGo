@@ -1,0 +1,40 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+	  <ProjectGuid>1F8EBE02-2B40-4D76-B950-B9AC97491D34</ProjectGuid>
+	  <CodeAnalysisRuleSet>..\.sonarlint\rngocsharp.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Remove="nlog.config" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="..\.sonarlint\rngo\CSharp\SonarLint.xml" Link="SonarLint.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="nlog.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.0" />
+    <PackageReference Include="NLog" Version="5.1.1" />
+    <PackageReference Include="NLog.Web.AspNetCore" Version="5.2.1" />
+    <PackageReference Include="Rn.NetCore.Common" Version="6.1.0.101" />
+    <PackageReference Include="Rn.NetCore.DbCommon" Version="6.1.1.105" />
+    <PackageReference Include="Rn.NetCore.Metrics" Version="6.1.0.103" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\RnGo.Core\RnGo.Core.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,16 @@
+build/
+\.vs/
+obj/
+bin/
+artifacts/
+tools/
+src/.idea/
+
+*.ncrunchsolution
+*.ncrunchsolution.user
+*.crunchsolution.cache
+*.executiontimes.cache
+*.machine.json
+
+.github/.sonarqube/
+.sonarlint/

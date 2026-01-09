@@ -1,0 +1,34 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+	  <ProjectGuid>6CC7F42B-44CE-4F24-8B7C-7DF4F9B2C42E</ProjectGuid>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
+    <PackageReference Include="NLog" Version="5.1.1" />
+    <PackageReference Include="NLog.Extensions.Logging" Version="5.2.1" />
+    <PackageReference Include="Rn.NetCore.Common" Version="6.1.0.101" />
+    <PackageReference Include="Rn.NetCore.DbCommon" Version="6.1.1.105" />
+    <PackageReference Include="Rn.NetCore.Metrics" Version="6.1.0.103" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\RnGo.Core\RnGo.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="nlog.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>
