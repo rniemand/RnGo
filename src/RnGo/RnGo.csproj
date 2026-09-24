@@ -24,17 +24,38 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.22.1" />
-    <PackageReference Include="NLog" Version="6.0.7" />
-    <PackageReference Include="NLog.Web.AspNetCore" Version="6.1.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.23.0" />
+    <PackageReference Include="NLog" Version="6.2.1" />
+    <PackageReference Include="NLog.Web.AspNetCore" Version="6.2.1" />
     <PackageReference Include="Rn.NetCore.Common" Version="6.1.0.101" />
     <PackageReference Include="Rn.NetCore.DbCommon" Version="6.1.1.105" />
     <PackageReference Include="Rn.NetCore.Metrics" Version="6.1.0.103" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="10.1.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="10.2.3" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\RnGo.Core\RnGo.Core.csproj" />
+  </ItemGroup>
+
+  <!--
+    Trimmed (Docker) publish settings. These keep reflection-dependent code that the trimmer cannot see:
+    MVC controller discovery, Swagger/ApiExplorer metadata, System.Text.Json, Dapper entity mapping,
+    Rn.NetCore config binding and MySql.Data's System.Configuration usage.
+    Validate changes with .github/scripts/smoke-test.sh.
+  -->
+  <PropertyGroup Condition="'$(PublishTrimmed)' == 'true'">
+    <MvcEnhancedModelMetadataSupport>true</MvcEnhancedModelMetadataSupport>
+    <JsonSerializerIsReflectionEnabledByDefault>true</JsonSerializerIsReflectionEnabledByDefault>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(PublishTrimmed)' == 'true'">
+    <TrimmerRootAssembly Include="RnGo" />
+    <TrimmerRootAssembly Include="RnGo.Core" />
+    <TrimmerRootAssembly Include="Rn.NetCore.Common" />
+    <TrimmerRootAssembly Include="Rn.NetCore.DbCommon" />
+    <TrimmerRootAssembly Include="Rn.NetCore.Metrics" />
+    <TrimmerRootAssembly Include="MySql.Data" />
+    <TrimmerRootAssembly Include="System.Configuration.ConfigurationManager" />
   </ItemGroup>
 
 </Project>

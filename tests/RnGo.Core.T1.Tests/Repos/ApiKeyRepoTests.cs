@@ -3,12 +3,11 @@ using System.Data;
 using System.Threading.Tasks;
 using NSubstitute;
 using NUnit.Framework;
-using Rn.NetCore.Common.Logging;
 using Rn.NetCore.DbCommon;
-using Rn.NetCore.Metrics;
 using RnGo.Core.Entities;
 using RnGo.Core.RepoQueries;
 using RnGo.Core.Repos;
+using RnGo.Core.T1.Tests.TestSupport;
 using RnGo.Core.T1.Tests.TestSupport.Builders;
 
 namespace RnGo.Core.T1.Tests.Repos;
@@ -40,7 +39,7 @@ public class ApiKeyRepoTests
       .ExecuteAsync(dbConnection, SqlQuery, Arg.Any<ApiKeyEntity>())
       .Returns(1);
 
-    var baseRepoHelper = GetBaseRepoHelper(
+    var baseRepoHelper = BaseRepoHelperFactory.Create<ApiKeyRepo>(
       connectionHelper: connectionHelper,
       connectionName: ConnectionName);
 
@@ -81,7 +80,7 @@ public class ApiKeyRepoTests
       .QueryAsync<ApiKeyEntity>(dbConnection, SqlQuery, Arg.Any<ApiKeyEntity>())
       .Returns(new List<ApiKeyEntity> { apiKey1 });
 
-    var baseRepoHelper = GetBaseRepoHelper(
+    var baseRepoHelper = BaseRepoHelperFactory.Create<ApiKeyRepo>(
       connectionHelper: connectionHelper,
       connectionName: ConnectionName);
 
@@ -126,7 +125,7 @@ public class ApiKeyRepoTests
       .QueryAsync<ApiKeyEntity>(dbConnection, SqlQuery)
       .Returns(new List<ApiKeyEntity> { apiKey1, apiKey2 });
 
-    var baseRepoHelper = GetBaseRepoHelper(
+    var baseRepoHelper = BaseRepoHelperFactory.Create<ApiKeyRepo>(
       connectionHelper: connectionHelper,
       connectionName: ConnectionName);
 
@@ -150,45 +149,8 @@ public class ApiKeyRepoTests
 
 
   // Internal methods
-  private static IBaseRepoHelper GetBaseRepoHelper(
-    ILoggerAdapter<ApiKeyRepo>? logger = null,
-    IDbConnectionHelper? connectionHelper = null,
-    IMetricService? metrics = null,
-    ISqlFormatter? sqlFormatter = null,
-    RnDbConfig? dbConfig = null,
-    string? connectionName = null)
-  {
-    var baseRepoHelper = Substitute.For<IBaseRepoHelper>();
-
-    baseRepoHelper
-      .ResolveLogger<ApiKeyRepo>()
-      .Returns(logger ?? Substitute.For<ILoggerAdapter<ApiKeyRepo>>());
-
-    baseRepoHelper
-      .ResolveConnectionHelper()
-      .Returns(connectionHelper ?? Substitute.For<IDbConnectionHelper>());
-
-    baseRepoHelper
-      .ResolveMetricService()
-      .Returns(metrics ?? Substitute.For<IMetricService>());
-
-    baseRepoHelper
-      .ResolveConnectionName(Arg.Any<string>(), Arg.Any<string>())
-      .Returns(string.IsNullOrWhiteSpace(connectionName) ? nameof(ApiKeyRepo) : connectionName);
-
-    baseRepoHelper
-      .ResolveSqlFormatter()
-      .Returns(sqlFormatter ?? Substitute.For<ISqlFormatter>());
-
-    baseRepoHelper
-      .GetRnDbConfig()
-      .Returns(dbConfig ?? new RnDbConfig());
-
-    return baseRepoHelper;
-  }
-
   private static ApiKeyRepo GetApiKeyRepo(
     IBaseRepoHelper? helper = null,
     IApiKeyRepoQueries? repoQueries = null) =>
-    new(helper ?? GetBaseRepoHelper(), repoQueries ?? Substitute.For<IApiKeyRepoQueries>());
+    new(helper ?? BaseRepoHelperFactory.Create<ApiKeyRepo>(), repoQueries ?? Substitute.For<IApiKeyRepoQueries>());
 }

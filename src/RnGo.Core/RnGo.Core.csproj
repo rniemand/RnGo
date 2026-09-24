@@ -10,6 +10,9 @@
   <ItemGroup>
     <PackageReference Include="Rn.NetCore.Common" Version="6.1.0.101" />
     <PackageReference Include="Rn.NetCore.DbCommon" Version="6.1.1.105" />
+    <!-- Pinned to patch vulnerable transitive versions pulled in by Rn.NetCore.DbCommon / MySql.Data -->
+    <PackageReference Include="System.Data.SqlClient" Version="4.9.1" />
+    <PackageReference Include="System.Drawing.Common" Version="10.0.12" />
   </ItemGroup>
 
 </Project>

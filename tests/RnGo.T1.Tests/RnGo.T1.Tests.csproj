@@ -3,8 +3,8 @@
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
-	  <IsPackable>false</IsPackable>
-	  <ProjectGuid>A2DA7EEC-2705-44BD-A77B-ADE62FADD391</ProjectGuid>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <IsPackable>false</IsPackable>
   </PropertyGroup>
 
   <ItemGroup>
@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\RnGo.Core\RnGo.Core.csproj" />
+    <ProjectReference Include="..\..\src\RnGo\RnGo.csproj" />
   </ItemGroup>
 
 </Project>
