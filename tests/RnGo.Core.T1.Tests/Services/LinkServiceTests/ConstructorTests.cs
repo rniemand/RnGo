@@ -104,4 +104,36 @@ public class ConstructorTests
     // assert
     Assert.That(ex!.Message, Is.EqualTo("Unable to determine next link ID!"));
   }
+
+  [Test]
+  public async Task Constructor_GivenEmptyLinksTable_ShouldStartAtOne()
+  {
+    // arrange
+    var linkRepo = Substitute.For<ILinkRepo>();
+    var apiKeyService = Substitute.For<IApiKeyService>();
+    var stringHelper = Substitute.For<IStringHelper>();
+
+    var addLinkRequest = new AddLinkRequestBuilder()
+      .WithUrl(LinkUrl)
+      .WithApiKey(ApiKey)
+      .Build();
+
+    apiKeyService.IsValidApiKeyAsync(ApiKey).Returns(true);
+    linkRepo.GetByUrlAsync(LinkUrl).ReturnsNull();
+
+    // MAX(LinkId) over an empty table is NULL, which maps to 0
+    linkRepo
+      .GetMaxLinkIdAsync()
+      .Returns(new GenericCountEntity { CountLong = 0 });
+
+    // act
+    var linkService = TestHelper.GetLinkService(linkRepo: linkRepo,
+      apiKeyService: apiKeyService,
+      stringHelper: stringHelper);
+
+    await linkService.AddLinkAsync(addLinkRequest);
+
+    // assert
+    stringHelper.Received(1).GenerateLinkString(1);
+  }
 }

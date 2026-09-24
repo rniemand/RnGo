@@ -11,11 +11,16 @@ public interface IApiKeyService
 
 public class ApiKeyService : IApiKeyService
 {
-  public List<string> ApiKeys { get; } = new();
+  private static readonly TimeSpan RefreshInterval = TimeSpan.FromMinutes(10);
+
+  // Replaced wholesale on refresh (never mutated) so concurrent readers always see a complete set
+  private volatile HashSet<string> _apiKeys = new(StringComparer.OrdinalIgnoreCase);
   private readonly ILogger<ApiKeyService> _logger;
   private readonly IApiKeyRepo _apiKeyRepo;
   private readonly IDateTimeAbstraction _dateTime;
   private DateTime _nextRefreshTime = DateTime.MinValue;
+
+  public IReadOnlyCollection<string> ApiKeys => _apiKeys;
 
   public ApiKeyService(
     ILogger<ApiKeyService> logger,
@@ -32,13 +37,12 @@ public class ApiKeyService : IApiKeyService
   public async Task<bool> IsValidApiKeyAsync(string apiKey)
   {
     await RefreshApiKeys();
-    if (ApiKeys.Count == 0)
+
+    var apiKeys = _apiKeys;
+    if (apiKeys.Count == 0 || string.IsNullOrEmpty(apiKey))
       return false;
 
-    var upperKey = apiKey.ToUpper();
-    var isValid = ApiKeys.Any(x => x.Equals(upperKey));
-
-    if (isValid)
+    if (apiKeys.Contains(apiKey))
       return true;
 
     _logger.LogWarning("Invalid API provided: {apiKey}", apiKey);
@@ -50,14 +54,12 @@ public class ApiKeyService : IApiKeyService
     if (_dateTime.Now < _nextRefreshTime)
       return;
 
-    _nextRefreshTime = _dateTime.Now.AddMinutes(10);
+    _nextRefreshTime = _dateTime.Now.Add(RefreshInterval);
 
     // Will be extended out to revoke keys in the future
-    ApiKeys.Clear();
-
     var dbApiKeys = await _apiKeyRepo.GetEnabledAsync();
-    ApiKeys.AddRange(dbApiKeys.Select(x => x.ApiKey));
+    _apiKeys = new HashSet<string>(dbApiKeys.Select(x => x.ApiKey), StringComparer.OrdinalIgnoreCase);
 
-    _logger.LogInformation("Loaded {count} enabled API keys", ApiKeys.Count);
+    _logger.LogInformation("Loaded {count} enabled API keys", _apiKeys.Count);
   }
 }

@@ -46,4 +46,40 @@ public class Base36Tests
   [Test]
   public void NumericValue_GivenBase36String_ShouldReturnNumber() =>
     Assert.That(new Base36("SD").NumericValue, Is.EqualTo(1021));
+
+  [TestCase("1Y2P0IJ32E8E8")] // long.MaxValue + 1
+  [TestCase("ZZZZZZZZZZZZZZ")]
+  [TestCase("É")] // non-ASCII letter
+  [TestCase("-")]
+  public void Base36ToNumber_GivenOutOfRangeOrNonAsciiValue_ShouldThrow(string input) =>
+    Assert.Throws<Exception>(() => Base36.Base36ToNumber(input));
+
+  [Test]
+  public void NumberToBase36_GivenMinValue_ShouldThrow() =>
+    Assert.Throws<Exception>(() => Base36.NumberToBase36(long.MinValue));
+
+  [Test]
+  public void IncrementOperator_GivenValue_ShouldIncrement()
+  {
+    var value = new Base36(35);
+    value++;
+    Assert.That(value.Value, Is.EqualTo("10"));
+  }
+
+  [Test]
+  public void DecrementOperator_GivenValue_ShouldDecrement()
+  {
+    var value = new Base36(36);
+    value--;
+    Assert.That(value.Value, Is.EqualTo("Z"));
+  }
+
+  [Test]
+  public void ImplicitIntConversion_GivenValueTooLarge_ShouldThrowOverflow() =>
+    Assert.Throws<OverflowException>(() => { int _ = new Base36(long.MaxValue); });
+
+  [TestCase(35, 3, "00Z")]
+  [TestCase(1296, 2, "100")]
+  public void ToString_GivenMinimumDigits_ShouldPad(long input, int digits, string expected) =>
+    Assert.That(new Base36(input).ToString(digits), Is.EqualTo(expected));
 }

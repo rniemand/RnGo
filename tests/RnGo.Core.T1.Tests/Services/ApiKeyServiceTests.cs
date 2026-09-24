@@ -128,6 +128,53 @@ public class ApiKeyServiceTests
     Assert.That(service.ApiKeys, Is.EqualTo(new[] { newKey }));
   }
 
+  [Test]
+  public async Task IsValidApiKeyAsync_GivenKeyStoredInLowercase_ShouldMatch()
+  {
+    // arrange
+    _apiKeyRepo
+      .GetEnabledAsync()
+      .Returns(new List<ApiKeyEntity> { new ApiKeyEntityBuilder().WithApiKey(ApiKey.ToLower()).Build() });
+
+    // act
+    var isValid = await GetService().IsValidApiKeyAsync(ApiKey);
+
+    // assert
+    Assert.That(isValid, Is.True);
+  }
+
+  [TestCase("")]
+  [TestCase(null)]
+  public async Task IsValidApiKeyAsync_GivenMissingKey_ShouldReturnFalse(string? apiKey)
+  {
+    // act
+    var isValid = await GetService().IsValidApiKeyAsync(apiKey!);
+
+    // assert
+    Assert.That(isValid, Is.False);
+  }
+
+  [Test]
+  public async Task IsValidApiKeyAsync_GivenRefreshFails_ShouldKeepPreviouslyLoadedKeys()
+  {
+    // arrange
+    var service = GetService();
+    await service.RefreshApiKeys();
+
+    _apiKeyRepo
+      .GetEnabledAsync()
+      .Returns(Task.FromException<List<ApiKeyEntity>>(new InvalidOperationException("db down")));
+
+    _now = _now.AddMinutes(10);
+
+    // act
+    Assert.ThrowsAsync<InvalidOperationException>(() => service.RefreshApiKeys());
+    var isValid = await service.IsValidApiKeyAsync(ApiKey);
+
+    // assert
+    Assert.That(isValid, Is.True);
+  }
+
   private ApiKeyService GetService() =>
     new(Substitute.For<ILogger<ApiKeyService>>(), _apiKeyRepo, _dateTime);
 }

@@ -21,18 +21,18 @@ public class ApiKeyRepo : BaseRepo<ApiKeyRepo>, IApiKeyRepo
     _queries = queries;
   }
 
-  public async Task<int> AddAsync(string apiKey) =>
-    await ExecuteAsync(nameof(AddAsync), _queries.Add(), new ApiKeyEntity
+  public Task<int> AddAsync(string apiKey) =>
+    ExecuteAsync(nameof(AddAsync), _queries.Add(), new ApiKeyEntity
     {
       ApiKey = apiKey
     });
 
-  public async Task<ApiKeyEntity?> GetAsync(string apiKey) =>
-    await GetSingle<ApiKeyEntity>(nameof(GetAsync), _queries.Get(), new ApiKeyEntity
+  public Task<ApiKeyEntity?> GetAsync(string apiKey) =>
+    GetSingle<ApiKeyEntity>(nameof(GetAsync), _queries.Get(), new ApiKeyEntity
     {
       ApiKey = apiKey
     });
 
-  public async Task<List<ApiKeyEntity>> GetEnabledAsync() =>
-    await GetList<ApiKeyEntity>(nameof(GetEnabledAsync), _queries.GetEnabled());
+  public Task<List<ApiKeyEntity>> GetEnabledAsync() =>
+    GetList<ApiKeyEntity>(nameof(GetEnabledAsync), _queries.GetEnabled());
 }

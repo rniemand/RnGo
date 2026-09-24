@@ -20,7 +20,8 @@ public class LinkService : ILinkService
   private readonly IApiKeyService _apiKeyService;
   private readonly ILinkRepo _linkRepo;
   private readonly IStringHelper _stringHelper;
-  private long _nextLinkId;
+  // Singleton shared across requests: only ever advanced via Interlocked
+  private long _lastLinkId;
 
   public LinkService(ILoggerAdapter<LinkService> logger,
     IApiKeyService apiKeyService,
@@ -32,7 +33,7 @@ public class LinkService : ILinkService
     _linkRepo = linkRepo;
     _stringHelper = stringHelper;
 
-    _nextLinkId = GetNextLinkId();
+    _lastLinkId = GetMaxLinkId();
   }
 
   public async Task<string> ResolveAsync(string shortCode)
@@ -62,7 +63,7 @@ public class LinkService : ILinkService
       return response.WithSuccess(existingLink.ShortCode);
 
     // This is a new link, add it
-    var linkId = _nextLinkId++;
+    var linkId = Interlocked.Increment(ref _lastLinkId);
     var shortCode = _stringHelper.GenerateLinkString(linkId);
     var linkEntity = new LinkEntity(request.Url, shortCode);
 
@@ -93,16 +94,13 @@ public class LinkService : ILinkService
   private static bool IsValidLink(string link) =>
     !string.IsNullOrWhiteSpace(link);
 
-  private long GetNextLinkId()
+  private long GetMaxLinkId()
   {
-    var countEntity = _linkRepo.GetMaxLinkIdAsync().GetAwaiter().GetResult();
-    if (countEntity is null)
-      return 1;
-
-    var nextLinkId = countEntity.CountLong;
-    if (nextLinkId <= 0)
+    // MAX(LinkId) over an empty table is NULL, which maps to 0 (or no row at all)
+    var maxLinkId = _linkRepo.GetMaxLinkIdAsync().GetAwaiter().GetResult()?.CountLong ?? 0;
+    if (maxLinkId < 0)
       throw new Exception("Unable to determine next link ID!");
 
-    return nextLinkId + 1;
+    return maxLinkId;
   }
 }
